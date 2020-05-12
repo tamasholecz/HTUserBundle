@@ -19,7 +19,7 @@ class ProfileController extends AbstractController
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-		return $this->render('@User/profile_show.html.twig', [
+		return $this->render('@HTUser/profile_show.html.twig', [
 			'user' => $this->getUser(),
 		]);
 	}
@@ -56,7 +56,7 @@ class ProfileController extends AbstractController
 			return $response;
 		}
 
-		return $this->render('@User/profile_edit.html.twig', [
+		return $this->render('@HTUser/profile_edit.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}

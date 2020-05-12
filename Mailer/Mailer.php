@@ -20,12 +20,12 @@ class Mailer implements MailerInterface
 	public function sendConfirmationEmailMessage(User $user): void
 	{
 		$confirmationUrl = $this->router->generate('user_registration_confirm', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-		$this->mailer->send('@User/registration_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());
+		$this->mailer->send('@HTUser/registration_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());
 	}
 
 	public function sendResettingEmailMessage(User $user): void
 	{
 		$confirmationUrl = $this->router->generate('user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
-		$this->mailer->send('@User/resetting_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());
+		$this->mailer->send('@HTUser/resetting_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());
 	}
 }

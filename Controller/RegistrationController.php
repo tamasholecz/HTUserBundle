@@ -50,7 +50,7 @@ class RegistrationController extends AbstractController
 			}
 		}
 
-		return $this->render('@User/registration_register.html.twig', [
+		return $this->render('@HTUser/registration_register.html.twig', [
 			'form' => $form->createView(),
 		]);
 	}
@@ -70,7 +70,7 @@ class RegistrationController extends AbstractController
 			return new RedirectResponse($this->container->get('router')->generate('login'));
 		}
 
-		return $this->render('@User/registration_check_email.html.twig', [
+		return $this->render('@HTUser/registration_check_email.html.twig', [
 			'user' => $user,
 		]);
 	}
@@ -105,7 +105,7 @@ class RegistrationController extends AbstractController
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
 		return $this->render(
-			'@User/registration_confirmed.html.twig', [
+			'@HTUser/registration_confirmed.html.twig', [
 			'user' => $this->getUser(),
 		]);
 	}

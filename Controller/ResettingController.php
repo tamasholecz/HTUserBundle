@@ -20,7 +20,7 @@ class ResettingController extends AbstractController
 
 	public function request()
 	{
-		return $this->render('@User/resetting_request.html.twig');
+		return $this->render('@HTUser/resetting_request.html.twig');
 	}
 
 	public function sendEmail(UserManager $userManager, EventDispatcherInterface $dispatcher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, Request $request)
@@ -75,7 +75,7 @@ class ResettingController extends AbstractController
 			return new RedirectResponse($this->generateUrl('user_resetting_request'));
 		}
 
-		return $this->render('@User/resetting_check_email.html.twig', [
+		return $this->render('@HTUser/resetting_check_email.html.twig', [
 			'tokenLifetime' => ceil($this->retryTtl / 3600),
 		]);
 	}
@@ -113,7 +113,7 @@ class ResettingController extends AbstractController
 			return $response;
 		}
 
-		return $this->render('@User/resetting_reset.html.twig', array(
+		return $this->render('@HTUser/resetting_reset.html.twig', array(
 			'token' => $token,
 			'form' => $form->createView(),
 		));
