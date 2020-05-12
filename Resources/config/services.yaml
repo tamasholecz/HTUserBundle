@@ -4,14 +4,6 @@ services:
         autoconfigure: true
         resource: '../../{Form}'
 
-    user_listener:
-        arguments:
-            - '@security.user_password_encoder.generic'
-        class: HT\UserBundle\EventListener\UserPasswordUpgrader
-        tags:
-            - { name: doctrine.orm.entity_listener, event: 'prePersist', lazy: true }
-            - { name: doctrine.orm.entity_listener, event: 'preUpdate', lazy: true }
-
     htuser.user_manager:
         class: HT\UserBundle\Doctrine\UserManager
         public: true
@@ -34,6 +26,20 @@ services:
             - '@parameter_bag'
             - '@swiftmailer.mailer'
 
+    htuser.mailer.default:
+        class: HT\UserBundle\Mailer\Mailer
+        arguments:
+            - '@htuser.mailer.twig_swift'
+            - '@router.default'
+
+    htuser.token_generator:
+        class: HT\UserBundle\Util\TokenGenerator
+
+    HT\UserBundle\Controller\SecurityController:
+        tags: [controller.service_arguments]
+        bind:
+            $authenticationUtils: '@security.authentication_utils'
+
     HT\UserBundle\Controller\RegistrationController:
         tags: [controller.service_arguments]
         bind:
@@ -53,3 +59,30 @@ services:
         tags: [controller.service_arguments]
         bind:
             $userManager: '@htuser.user_manager'
+
+    HT\UserBundle\EventListener\AuthenticationListener:
+        tags: [kernel.event_subscriber]
+        arguments:
+            - '@security.authentication.guard_handler'
+            - '@htuser.security.login_form_authenticator'
+            - '@debug.event_dispatcher'
+
+    HT\UserBundle\EventListener\EmailConfirmationListener:
+        tags: [kernel.event_subscriber]
+        arguments:
+            - '@htuser.mailer.default'
+            - '@htuser.token_generator'
+            - '@router.default'
+            - '@session'
+
+    HT\UserBundle\EventListener\LoginListener:
+        tags: [kernel.event_subscriber]
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+
+    HT\UserBundle\EventListener\UserPasswordUpgrader:
+        arguments:
+            - '@security.user_password_encoder.generic'
+        tags:
+            - { name: doctrine.orm.entity_listener, event: 'prePersist', lazy: true }
+            - { name: doctrine.orm.entity_listener, event: 'preUpdate', lazy: true }
