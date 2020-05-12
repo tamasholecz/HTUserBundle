@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\Security;
 
-use HT\UserBundle\Doctrine\UserManager;
+use HT\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -28,7 +28,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
 	private $csrfTokenManager;
 	private $passwordEncoder;
 
-	public function __construct(UserManager $userManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+	public function __construct(UserManagerInterface $userManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
 	{
 		$this->userManager = $userManager;
 		$this->urlGenerator = $urlGenerator;

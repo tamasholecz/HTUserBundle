@@ -2,7 +2,6 @@
 
 namespace HT\UserBundle\Controller;
 
-use HT\UserBundle\Doctrine\UserManager;
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
 use HT\UserBundle\HTUserEvents;
@@ -15,8 +14,9 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RegistrationController extends AbstractController
 {
-	public function register(UserManager $userManager, EventDispatcherInterface $dispatcher, Request $request): Response
+	public function register(EventDispatcherInterface $dispatcher, Request $request): Response
 	{
+		$userManager = $this->get('htuser.user_manager');
 		$user = $userManager->createUser();
 
 		$event = new UserEvent($user, $request);
@@ -55,7 +55,7 @@ class RegistrationController extends AbstractController
 		]);
 	}
 
-	public function checkEmail(UserManager $userManager, Request $request): Response
+	public function checkEmail(Request $request): Response
 	{
 		$email = $request->getSession()->get('user_send_confirmation_email/email');
 
@@ -64,7 +64,7 @@ class RegistrationController extends AbstractController
 		}
 
 		$request->getSession()->remove('user_send_confirmation_email/email');
-		$user = $userManager->findUserBy(['email' => $email]);
+		$user = $this->get('htuser.user_manager')->findUserBy(['email' => $email]);
 
 		if (null === $user) {
 			return new RedirectResponse($this->container->get('router')->generate('login'));
@@ -75,8 +75,9 @@ class RegistrationController extends AbstractController
 		]);
 	}
 
-	public function confirm(UserManager $userManager, EventDispatcherInterface $dispatcher, Request $request, string $token): Response
+	public function confirm(EventDispatcherInterface $dispatcher, Request $request, string $token): Response
 	{
+		$userManager = $this->get('htuser.user_manager');
 		$user = $userManager->findUserBy(['confirmationToken' => $token]);
 
 		if (null === $user) {

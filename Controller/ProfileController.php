@@ -2,7 +2,6 @@
 
 namespace HT\UserBundle\Controller;
 
-use HT\UserBundle\Doctrine\UserManager;
 use HT\UserBundle\Entity\User;
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
@@ -24,7 +23,7 @@ class ProfileController extends AbstractController
 		]);
 	}
 
-	public function edit(UserManager $userManager, EventDispatcherInterface $dispatcher, Request $request): Response
+	public function edit(EventDispatcherInterface $dispatcher, Request $request): Response
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		/** @var User $user */
@@ -44,7 +43,7 @@ class ProfileController extends AbstractController
 			$event = new FormEvent($form, $request);
 			$dispatcher->dispatch($event, HTUserEvents::PROFILE_EDIT_SUCCESS);
 
-			$userManager->updateUser($user);
+			$this->get('htuser.user_manager')->updateUser($user);
 
 			if (null === $response = $event->getResponse()) {
 				$url = $this->generateUrl('user_profile_show');

@@ -2,7 +2,6 @@
 
 namespace HT\UserBundle\Controller;
 
-use HT\UserBundle\Doctrine\UserManager;
 use HT\UserBundle\Entity\User;
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
@@ -15,7 +14,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ChangePasswordController extends AbstractController
 {
-	public function changePassword(UserManager $userManager, EventDispatcherInterface $dispatcher, Request $request): Response
+	public function changePassword(EventDispatcherInterface $dispatcher, Request $request): Response
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		/** @var User $user */
@@ -33,7 +32,7 @@ class ChangePasswordController extends AbstractController
 			$event = new FormEvent($form, $request);
 			$dispatcher->dispatch($event, HTUserEvents::CHANGE_PASSWORD_SUCCESS);
 
-			$userManager->updateUser($user);
+			$this->get('htuser.user_manager')->updateUser($user);
 
 			if (null === $response = $event->getResponse()) {
 				$url = $this->generateUrl('user_profile_show');
