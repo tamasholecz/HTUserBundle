@@ -6,6 +6,7 @@ use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
 use HT\UserBundle\Mailer\Mailer;
 use HT\UserBundle\HTUserEvents;
+use HT\UserBundle\Model\UserManagerInterface;
 use HT\UserBundle\Util\TokenGeneratorInterface;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,11 +23,10 @@ class ResettingController extends AbstractController
 		return $this->render('@HTUser/resetting_request.html.twig');
 	}
 
-	public function sendEmail(EventDispatcherInterface $dispatcher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, Request $request)
+	public function sendEmail(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, Request $request)
 	{
 		$username = $request->request->get('username');
 
-		$userManager = $this->get('htuser.user_manager');
 		$user = $userManager->findUserByUsernameOrEmail($username);
 		// TODO: if user null
 
@@ -80,9 +80,8 @@ class ResettingController extends AbstractController
 		]);
 	}
 
-	public function reset(EventDispatcherInterface $dispatcher, Request $request, string $token)
+	public function reset(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, Request $request, string $token)
 	{
-		$userManager = $this->get('htuser.user_manager');
 		$user = $userManager->findUserByConfirmationToken($token);
 
 		if (null === $user) {

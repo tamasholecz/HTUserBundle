@@ -2,7 +2,7 @@ services:
     HT\UserBundle\:
         autowire: true
         autoconfigure: true
-        resource: '../../{Controller,Form}'
+        resource: '../../{Form}'
 
     user_listener:
         arguments:
@@ -33,3 +33,23 @@ services:
             - '@twig'
             - '@parameter_bag'
             - '@swiftmailer.mailer'
+
+    HT\UserBundle\Controller\RegistrationController:
+        tags: [controller.service_arguments]
+        bind:
+            $userManager: '@htuser.user_manager'
+
+    HT\UserBundle\Controller\ProfileController:
+        tags: [controller.service_arguments]
+        bind:
+            $userManager: '@htuser.user_manager'
+
+    HT\UserBundle\Controller\ChangePasswordController:
+        tags: [controller.service_arguments]
+        bind:
+            $userManager: '@htuser.user_manager'
+
+    HT\UserBundle\Controller\ResettingController:
+        tags: [controller.service_arguments]
+        bind:
+            $userManager: '@htuser.user_manager'
