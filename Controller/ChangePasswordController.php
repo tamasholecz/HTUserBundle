@@ -15,14 +15,23 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ChangePasswordController extends AbstractController
 {
-	public function changePassword(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, Request $request): Response
+	private $userManager;
+	private $dispatcher;
+
+	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher)
+	{
+		$this->userManager = $userManager;
+		$this->dispatcher = $dispatcher;
+	}
+
+	public function changePassword(Request $request): Response
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 		/** @var User $user */
 		$user = $this->getUser();
 
 		$event = new UserEvent($user, $request);
-		$dispatcher->dispatch($event, HTUserEvents::CHANGE_PASSWORD_INITIALIZE);
+		$this->dispatcher->dispatch($event, HTUserEvents::CHANGE_PASSWORD_INITIALIZE);
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();
 		}
@@ -31,16 +40,16 @@ class ChangePasswordController extends AbstractController
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$event = new FormEvent($form, $request);
-			$dispatcher->dispatch($event, HTUserEvents::CHANGE_PASSWORD_SUCCESS);
+			$this->dispatcher->dispatch($event, HTUserEvents::CHANGE_PASSWORD_SUCCESS);
 
-			$userManager->updateUser($user);
+			$this->userManager->updateUser($user);
 
 			if (null === $response = $event->getResponse()) {
 				$url = $this->generateUrl('user_profile_show');
 				$response = new RedirectResponse($url);
 			}
 
-			$dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::CHANGE_PASSWORD_COMPLETED);
+			$this->dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::CHANGE_PASSWORD_COMPLETED);
 
 			return $response;
 		}

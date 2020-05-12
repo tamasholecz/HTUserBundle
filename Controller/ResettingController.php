@@ -16,49 +16,62 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ResettingController extends AbstractController
 {
+	private $userManager;
+	private $tokenGenerator;
+	private $mailer;
+	private $dispatcher;
+
 	private $retryTtl = 7200;
+
+	public function __construct(UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, EventDispatcherInterface $dispatcher)
+	{
+		$this->userManager = $userManager;
+		$this->tokenGenerator = $tokenGenerator;
+		$this->mailer = $mailer;
+		$this->dispatcher = $dispatcher;
+	}
 
 	public function request()
 	{
 		return $this->render('@HTUser/resetting_request.html.twig');
 	}
 
-	public function sendEmail(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, Request $request)
+	public function sendEmail(Request $request)
 	{
 		$username = $request->request->get('username');
 
-		$user = $userManager->findUserByUsernameOrEmail($username);
+		$user = $this->userManager->findUserByUsernameOrEmail($username);
 		// TODO: if user null
 
 		$event = new UserEvent($user, $request);
-		$dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_INITIALIZE);
+		$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_INITIALIZE);
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();
 		}
 
 		if (null !== $user) {// TODO: && !$user->isPasswordRequestNonExpired($this->retryTtl)
 			$event = new UserEvent($user, $request);
-			$dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_REQUEST);
+			$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_REQUEST);
 			if (null !== $event->getResponse()) {
 				return $event->getResponse();
 			}
 
 			if (null === $user->getConfirmationToken()) {
-				$user->setConfirmationToken($tokenGenerator->generateToken());
+				$user->setConfirmationToken($this->tokenGenerator->generateToken());
 			}
 
 			$event = new UserEvent($user, $request);
-			$dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_CONFIRM);
+			$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_CONFIRM);
 			if (null !== $event->getResponse()) {
 				return $event->getResponse();
 			}
 
-			$mailer->sendResettingEmailMessage($user);
+			$this->mailer->sendResettingEmailMessage($user);
 			$user->setPasswordRequestedAt(new DateTime());
-			$userManager->updateUser($user);
+			$this->userManager->updateUser($user);
 
 			$event = new UserEvent($user, $request);
-			$dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_COMPLETED);
+			$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_COMPLETED);
 			if (null !== $event->getResponse()) {
 				return $event->getResponse();
 			}
@@ -80,16 +93,16 @@ class ResettingController extends AbstractController
 		]);
 	}
 
-	public function reset(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, Request $request, string $token)
+	public function reset(Request $request, string $token)
 	{
-		$user = $userManager->findUserByConfirmationToken($token);
+		$user = $this->userManager->findUserByConfirmationToken($token);
 
 		if (null === $user) {
 			return new RedirectResponse($this->container->get('router')->generate('login'));
 		}
 
 		$event = new UserEvent($user, $request);
-		$dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_INITIALIZE);
+		$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_INITIALIZE);
 
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();
@@ -99,16 +112,16 @@ class ResettingController extends AbstractController
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$event = new FormEvent($form, $request);
-			$dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_SUCCESS);
+			$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_SUCCESS);
 
-			$userManager->updateUser($user);
+			$this->userManager->updateUser($user);
 
 			if (null === $response = $event->getResponse()) {
 				$url = $this->generateUrl('user_profile_show');
 				$response = new RedirectResponse($url);
 			}
 
-			$dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::RESETTING_RESET_COMPLETED);
+			$this->dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::RESETTING_RESET_COMPLETED);
 
 			return $response;
 		}

@@ -36,28 +36,31 @@ services:
         class: HT\UserBundle\Util\TokenGenerator
 
     HT\UserBundle\Controller\SecurityController:
-        tags: [controller.service_arguments]
-        bind:
-            $authenticationUtils: '@security.authentication_utils'
+        autowire: true
+        public: true
 
     HT\UserBundle\Controller\RegistrationController:
-        tags: [controller.service_arguments]
-        bind:
+        autowire: true
+        public: true
+        arguments:
             $userManager: '@htuser.user_manager'
 
     HT\UserBundle\Controller\ProfileController:
-        tags: [controller.service_arguments]
-        bind:
+        autowire: true
+        public: true
+        arguments:
             $userManager: '@htuser.user_manager'
 
     HT\UserBundle\Controller\ChangePasswordController:
-        tags: [controller.service_arguments]
-        bind:
+        autowire: true
+        public: true
+        arguments:
             $userManager: '@htuser.user_manager'
 
     HT\UserBundle\Controller\ResettingController:
-        tags: [controller.service_arguments]
-        bind:
+        autowire: true
+        public: true
+        arguments:
             $userManager: '@htuser.user_manager'
             $tokenGenerator: '@htuser.token_generator'
             $mailer: '@htuser.mailer.default'

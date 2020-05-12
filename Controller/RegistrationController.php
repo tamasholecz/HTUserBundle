@@ -15,12 +15,21 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RegistrationController extends AbstractController
 {
-	public function register(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, Request $request): Response
+	private $userManager;
+	private $dispatcher;
+
+	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher)
 	{
-		$user = $userManager->createUser();
+		$this->userManager = $userManager;
+		$this->dispatcher = $dispatcher;
+	}
+
+	public function register(Request $request): Response
+	{
+		$user = $this->userManager->createUser();
 
 		$event = new UserEvent($user, $request);
-		$dispatcher->dispatch($event, HTUserEvents::REGISTRATION_INITIALIZE);
+		$this->dispatcher->dispatch($event, HTUserEvents::REGISTRATION_INITIALIZE);
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();
 		}
@@ -30,20 +39,20 @@ class RegistrationController extends AbstractController
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {
 				$event = new FormEvent($form, $request);
-				$dispatcher->dispatch($event, HTUserEvents::REGISTRATION_SUCCESS);
+				$this->dispatcher->dispatch($event, HTUserEvents::REGISTRATION_SUCCESS);
 
-				$userManager->updateUser($user);
+				$this->userManager->updateUser($user);
 
 				if (null === $response = $event->getResponse()) {
 					$response = new RedirectResponse($this->generateUrl('user_registration_confirmed'));
 				}
 
-				$dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::REGISTRATION_COMPLETED);
+				$this->dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::REGISTRATION_COMPLETED);
 				return $response;
 			}
 
 			$event = new FormEvent($form, $request);
-			$dispatcher->dispatch($event, HTUserEvents::REGISTRATION_FAILURE);
+			$this->dispatcher->dispatch($event, HTUserEvents::REGISTRATION_FAILURE);
 
 			if (null !== $response = $event->getResponse()) {
 				return $response;
@@ -55,7 +64,7 @@ class RegistrationController extends AbstractController
 		]);
 	}
 
-	public function checkEmail(UserManagerInterface $userManager, Request $request): Response
+	public function checkEmail(Request $request): Response
 	{
 		$email = $request->getSession()->get('user_send_confirmation_email/email');
 
@@ -64,7 +73,7 @@ class RegistrationController extends AbstractController
 		}
 
 		$request->getSession()->remove('user_send_confirmation_email/email');
-		$user = $userManager->findUserBy(['email' => $email]);
+		$user = $this->userManager->findUserBy(['email' => $email]);
 
 		if (null === $user) {
 			return new RedirectResponse($this->container->get('router')->generate('login'));
@@ -75,9 +84,9 @@ class RegistrationController extends AbstractController
 		]);
 	}
 
-	public function confirm(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, Request $request, string $token): Response
+	public function confirm(Request $request, string $token): Response
 	{
-		$user = $userManager->findUserBy(['confirmationToken' => $token]);
+		$user = $this->userManager->findUserBy(['confirmationToken' => $token]);
 
 		if (null === $user) {
 			throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
@@ -87,15 +96,15 @@ class RegistrationController extends AbstractController
 		$user->setEnabled(true);
 
 		$event = new UserEvent($user, $request);
-		$dispatcher->dispatch($event, HTUserEvents::REGISTRATION_CONFIRM);
+		$this->dispatcher->dispatch($event, HTUserEvents::REGISTRATION_CONFIRM);
 
-		$userManager->updateUser($user);
+		$this->userManager->updateUser($user);
 
 		if (null === $response = $event->getResponse()) {
 			$response = new RedirectResponse($this->generateUrl('user_registration_confirmed'));
 		}
 
-		$dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::REGISTRATION_CONFIRMED);
+		$this->dispatcher->dispatch(new UserEvent($user, $request, $response), HTUserEvents::REGISTRATION_CONFIRMED);
 
 		return $response;
 	}

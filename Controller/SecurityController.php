@@ -8,11 +8,18 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-	public function login(AuthenticationUtils $authenticationUtils): Response
+	private $authenticationUtils;
+
+	public function __construct(AuthenticationUtils $authenticationUtils)
+	{
+		$this->authenticationUtils = $authenticationUtils;
+	}
+
+	public function login(): Response
 	{
 //		if ($this->getUser()) { return $this->redirectToRoute('sonata_admin_dashboard'); }
-		$error = $authenticationUtils->getLastAuthenticationError();
-		$lastUsername = $authenticationUtils->getLastUsername();
+		$error = $this->authenticationUtils->getLastAuthenticationError();
+		$lastUsername = $this->authenticationUtils->getLastUsername();
 
 		return $this->render('security/login.html.twig', [
 			'error' => $error,
