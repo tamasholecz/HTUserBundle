@@ -1,9 +1,9 @@
 <?php
 
-namespace App\UserBundle\Doctrine;
+namespace HT\UserBundle\Doctrine;
 
 use App\Entity\User;
-use App\UserBundle\Model\UserManager as BaseUserManager;
+use HT\UserBundle\Model\UserManager as BaseUserManager;
 use Doctrine\ORM\EntityManagerInterface;
 
 class UserManager extends BaseUserManager

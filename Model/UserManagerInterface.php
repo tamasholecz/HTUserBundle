@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Model;
+namespace HT\UserBundle\Model;
 
 use App\Entity\User;
 

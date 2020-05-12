@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UserBundle\EventListener;
+namespace HT\UserBundle\EventListener;
 
-use App\UserBundle\Entity\User;
+use HT\UserBundle\Entity\User;
 use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;

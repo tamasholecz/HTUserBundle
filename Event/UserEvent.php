@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UserBundle\Event;
+namespace HT\UserBundle\Event;
 
-use App\UserBundle\Entity\User;
+use HT\UserBundle\Entity\User;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;

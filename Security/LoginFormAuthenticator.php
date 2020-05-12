@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UserBundle\Security;
+namespace HT\UserBundle\Security;
 
-use App\UserBundle\Doctrine\UserManager;
+use HT\UserBundle\Doctrine\UserManager;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Entity;
+namespace HT\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @MappedSuperclass
  * @UniqueEntity("email")
  * @UniqueEntity("username")
- * @ORM\EntityListeners({"App\UserBundle\EventListener\UserPasswordUpgrader"})
+ * @ORM\EntityListeners({"HT\UserBundle\EventListener\UserPasswordUpgrader"})
  */
 abstract class User implements UserInterface
 {

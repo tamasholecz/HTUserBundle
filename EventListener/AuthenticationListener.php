@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UserBundle\EventListener;
+namespace HT\UserBundle\EventListener;
 
-use App\UserBundle\Event\UserEvent;
-use App\UserBundle\Security\LoginFormAuthenticator;
-use App\UserBundle\HTUserEvents;
+use HT\UserBundle\Event\UserEvent;
+use HT\UserBundle\Security\LoginFormAuthenticator;
+use HT\UserBundle\HTUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;

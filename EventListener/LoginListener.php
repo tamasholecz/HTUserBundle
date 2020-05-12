@@ -1,10 +1,10 @@
 <?php
 
-namespace App\UserBundle\EventListener;
+namespace HT\UserBundle\EventListener;
 
-use App\UserBundle\Entity\User;
-use App\UserBundle\Event\UserEvent;
-use App\UserBundle\HTUserEvents;
+use HT\UserBundle\Entity\User;
+use HT\UserBundle\Event\UserEvent;
+use HT\UserBundle\HTUserEvents;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

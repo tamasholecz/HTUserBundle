@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\DependencyInjection;
+namespace HT\UserBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

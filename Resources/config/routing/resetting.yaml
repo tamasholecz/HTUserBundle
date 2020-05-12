@@ -1,16 +1,16 @@
 user_resetting_request:
     path: /request
     methods: [GET]
-    defaults:  { _controller: App\UserBundle\Controller\ResettingController::request }
+    defaults:  { _controller: HT\UserBundle\Controller\ResettingController::request }
 user_resetting_send_email:
     path: /send-email
     methods: [POST]
-    defaults:  { _controller: App\UserBundle\Controller\ResettingController::sendEmail }
+    defaults:  { _controller: HT\UserBundle\Controller\ResettingController::sendEmail }
 user_resetting_check_email:
     path: /check-email
     methods: [GET]
-    defaults:  { _controller: App\UserBundle\Controller\ResettingController::checkEmail }
+    defaults:  { _controller: HT\UserBundle\Controller\ResettingController::checkEmail }
 user_resetting_reset:
     path: /reset/{token}
     methods: [GET,POST]
-    defaults:  { _controller: App\UserBundle\Controller\ResettingController::reset }
+    defaults:  { _controller: HT\UserBundle\Controller\ResettingController::reset }

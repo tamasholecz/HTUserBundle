@@ -1,12 +1,12 @@
 <?php
 
-namespace App\UserBundle\Controller;
+namespace HT\UserBundle\Controller;
 
-use App\UserBundle\Doctrine\UserManager;
-use App\UserBundle\Entity\User;
-use App\UserBundle\Event\FormEvent;
-use App\UserBundle\Event\UserEvent;
-use App\UserBundle\HTUserEvents;
+use HT\UserBundle\Doctrine\UserManager;
+use HT\UserBundle\Entity\User;
+use HT\UserBundle\Event\FormEvent;
+use HT\UserBundle\Event\UserEvent;
+use HT\UserBundle\HTUserEvents;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,7 @@ class ProfileController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm(\App\UserBundle\Form\ProfileType::class, $user);
+		$form = $this->createForm(\HT\UserBundle\Form\ProfileType::class, $user);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {

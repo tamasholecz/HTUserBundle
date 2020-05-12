@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Form;
+namespace HT\UserBundle\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;

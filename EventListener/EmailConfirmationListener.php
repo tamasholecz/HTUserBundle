@@ -1,12 +1,12 @@
 <?php
 
-namespace App\UserBundle\EventListener;
+namespace HT\UserBundle\EventListener;
 
-use App\UserBundle\Entity\User;
-use App\UserBundle\Event\FormEvent;
-use App\UserBundle\Mailer\Mailer;
-use App\UserBundle\HTUserEvents;
-use App\UserBundle\Util\TokenGeneratorInterface;
+use HT\UserBundle\Entity\User;
+use HT\UserBundle\Event\FormEvent;
+use HT\UserBundle\Mailer\Mailer;
+use HT\UserBundle\HTUserEvents;
+use HT\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;

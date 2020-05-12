@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Mailer;
+namespace HT\UserBundle\Mailer;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Twig\Environment;

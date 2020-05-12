@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Event;
+namespace HT\UserBundle\Event;
 
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;

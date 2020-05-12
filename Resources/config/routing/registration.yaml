@@ -1,16 +1,16 @@
 user_registration_register:
     path: /
     methods: [GET,POST]
-    defaults:  { _controller: App\UserBundle\Controller\RegistrationController::register }
+    defaults:  { _controller: HT\UserBundle\Controller\RegistrationController::register }
 user_registration_check_email:
     path: /check-email
     methods: [GET]
-    defaults:  { _controller: App\UserBundle\Controller\RegistrationController::checkEmail }
+    defaults:  { _controller: HT\UserBundle\Controller\RegistrationController::checkEmail }
 user_registration_confirm:
     path: /confirm/{token}
     methods: [GET]
-    defaults:  { _controller: App\UserBundle\Controller\RegistrationController::confirm }
+    defaults:  { _controller: HT\UserBundle\Controller\RegistrationController::confirm }
 user_registration_confirmed:
     path: /confirmed
     methods: [GET]
-    defaults:  { _controller: App\UserBundle\Controller\RegistrationController::confirmed }
+    defaults:  { _controller: HT\UserBundle\Controller\RegistrationController::confirmed }

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\UserBundle\Mailer;
+namespace HT\UserBundle\Mailer;
 
-use App\UserBundle\Entity\User;
+use HT\UserBundle\Entity\User;
 
 interface MailerInterface
 {

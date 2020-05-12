@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Util;
+namespace HT\UserBundle\Util;
 
 interface TokenGeneratorInterface
 {

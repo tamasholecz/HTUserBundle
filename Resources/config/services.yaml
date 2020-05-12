@@ -2,7 +2,7 @@ services:
     user_listener:
         arguments:
             - '@security.user_password_encoder.generic'
-        class: App\UserBundle\EventListener\UserPasswordUpgrader
+        class: HT\UserBundle\EventListener\UserPasswordUpgrader
         tags:
             - { name: doctrine.orm.entity_listener, event: 'prePersist', lazy: true }
             - { name: doctrine.orm.entity_listener, event: 'preUpdate', lazy: true }

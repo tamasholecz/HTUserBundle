@@ -1,6 +1,6 @@
 <?php
 
-namespace App\UserBundle\Form;
+namespace HT\UserBundle\Form;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\AbstractType;
