@@ -59,6 +59,8 @@ services:
         tags: [controller.service_arguments]
         bind:
             $userManager: '@htuser.user_manager'
+            $tokenGenerator: '@htuser.token_generator'
+            $mailer: '@htuser.mailer.default'
 
     HT\UserBundle\EventListener\AuthenticationListener:
         tags: [kernel.event_subscriber]
