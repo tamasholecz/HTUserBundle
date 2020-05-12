@@ -1,4 +1,9 @@
 services:
+    HT\UserBundle\:
+        autowire: true
+        autoconfigure: true
+        resource: '../../{Controller}'
+
     user_listener:
         arguments:
             - '@security.user_password_encoder.generic'
