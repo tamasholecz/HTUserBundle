@@ -6,3 +6,25 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: 'prePersist', lazy: true }
             - { name: doctrine.orm.entity_listener, event: 'preUpdate', lazy: true }
+
+    htuser.user_manager:
+        class: HT\UserBundle\Doctrine\UserManager
+        public: true
+        arguments:
+            - '@doctrine.orm.default_entity_manager'
+
+    htuser.security.login_form_authenticator:
+        class: HT\UserBundle\Security\LoginFormAuthenticator
+        arguments:
+            - '@htuser.user_manager'
+            - '@router.default'
+            - '@security.csrf.token_manager'
+            - '@security.user_password_encoder.generic'
+
+    htuser.mailer.twig_swift:
+        class: HT\UserBundle\Mailer\TwigSwiftMailer
+        public: true
+        arguments:
+            - '@twig'
+            - '@parameter_bag'
+            - '@swiftmailer.mailer'
