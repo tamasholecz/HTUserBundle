@@ -1,0 +1,8 @@
+user_profile_show:
+    path: /
+    methods: [GET]
+    defaults:  { _controller: App\UserBundle\Controller\ProfileController::show }
+user_profile_edit:
+    path: /edit
+    methods: [GET,POST]
+    defaults:  { _controller: App\UserBundle\Controller\ProfileController::edit }

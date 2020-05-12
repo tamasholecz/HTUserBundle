@@ -1,0 +1,10 @@
+{% trans_default_domain 'user' %}
+{% extends '@User/layout.html.twig' %}
+{% block content %}
+	{{ form_start(form, { 'action': path('user_resetting_reset', {'token': token}), 'attr': { 'class': 'user_resetting_reset' } }) }}
+	{{ form_widget(form) }}
+	<div>
+		<button type="submit" class="btn btn-primary">{{ 'Resetting reset submit'|trans }}</button>
+	</div>
+	{{ form_end(form) }}
+{% endblock %}

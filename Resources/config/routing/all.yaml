@@ -1,0 +1,14 @@
+security:
+    resource: 'security.yaml'
+registration:
+    resource: 'registration.yaml'
+    prefix: '/registration'
+profile:
+    resource: 'profile.yaml'
+    prefix: '/profile'
+resetting:
+    resource: 'resetting.yaml'
+    prefix: '/resetting'
+change_password:
+    resource: 'change_password.yaml'
+    prefix: '/profile'

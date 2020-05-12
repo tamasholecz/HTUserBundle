@@ -1,0 +1,8 @@
+{% trans_default_domain 'user' %}
+{% block subject %}
+{{ 'Resetting email subject'|trans({'%user%': user, '%confirmationUrl%': confirmationUrl})|raw }}
+{% endblock %}
+
+{% block body_html %}
+{{ 'Resetting email message'|trans({'%user%': user, '%confirmationUrl%': confirmationUrl})|raw|nl2br }}
+{% endblock %}

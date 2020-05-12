@@ -1,0 +1,8 @@
+login:
+    path: /login
+    methods: [GET,POST]
+    defaults:  { _controller: App\UserBundle\Controller\SecurityController::login }
+logout:
+    path: /logout
+    methods: [GET]
+    defaults:  { _controller: App\UserBundle\Controller\SecurityController::logout }

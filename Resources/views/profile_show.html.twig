@@ -1,0 +1,12 @@
+{% trans_default_domain 'user' %}
+{% extends '@User/layout.html.twig' %}
+{% block content %}
+	<div class="user_profile_show">
+		<p>{{ 'Username'|trans }}: {{ user.username }}</p>
+		<p>{{ 'Email'|trans }}: {{ user.email }}</p>
+		<p>{{ 'Name'|trans }}: {{ user.name }}</p>
+		<p>{{ 'Phone'|trans }}: {{ user.phone }}</p>
+		<a href="{{ path('user_profile_edit') }}">{{ 'Profile edit'|trans }}</a> |
+		<a href="{{ path('user_change_password') }}">{{ 'Change password'|trans }}</a>
+	</div>
+{% endblock %}

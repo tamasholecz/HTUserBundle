@@ -1,0 +1,10 @@
+{% trans_default_domain 'user' %}
+{% extends '@User/layout.html.twig' %}
+{% block content %}
+	<div class="registration">
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button type="submit" class="btn btn-primary">{{ 'Registration submit'|trans }}</button>
+		{{ form_end(form) }}
+	</div>
+{% endblock %}

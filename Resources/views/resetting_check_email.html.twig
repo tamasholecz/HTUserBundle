@@ -1,0 +1,5 @@
+{% trans_default_domain 'user' %}
+{% extends '@User/layout.html.twig' %}
+{% block content %}
+	{{ 'Resetting check email'|trans({'%tokenLifetime%': tokenLifetime})|nl2br }}
+{% endblock %}
