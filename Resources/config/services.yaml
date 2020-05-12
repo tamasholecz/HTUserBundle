@@ -67,7 +67,7 @@ services:
         arguments:
             - '@security.authentication.guard_handler'
             - '@htuser.security.login_form_authenticator'
-            - '@debug.event_dispatcher'
+            - '@event_dispatcher'
 
     HT\UserBundle\EventListener\EmailConfirmationListener:
         tags: [kernel.event_subscriber]
