@@ -6,18 +6,18 @@ use HT\UserBundle\Entity\User;
 use HT\UserBundle\Event\UserEvent;
 use HT\UserBundle\HTUserEvents;
 use DateTime;
-use Doctrine\ORM\EntityManagerInterface;
+use HT\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginListener implements EventSubscriberInterface
 {
-	private $em;
+	private $userManager;
 
-	public function __construct(EntityManagerInterface $em)
+	public function __construct(UserManagerInterface $userManager)
 	{
-		$this->em = $em;
+		$this->userManager = $userManager;
 	}
 
 	public static function getSubscribedEvents()
@@ -42,7 +42,6 @@ class LoginListener implements EventSubscriberInterface
 	public function setLastLogin(User $user)
 	{
 		$user->setLastLogin(new DateTime());
-		$this->em->persist($user);
-		$this->em->flush();
+		$this->userManager->updateUser($user);
 	}
 }

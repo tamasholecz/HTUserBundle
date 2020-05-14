@@ -83,7 +83,7 @@ services:
     HT\UserBundle\EventListener\LoginListener:
         tags: [kernel.event_subscriber]
         arguments:
-            - '@doctrine.orm.default_entity_manager'
+            - '@htuser.user_manager'
 
     HT\UserBundle\EventListener\UserPasswordUpgrader:
         arguments:
