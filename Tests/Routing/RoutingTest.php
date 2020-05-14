@@ -6,25 +6,26 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Routing\Loader\YamlFileLoader;
 use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Yaml\Yaml;
+use Symfony\Component\Routing\RouteCollectionBuilder;
 
 class RoutingTest extends TestCase
 {
+	public function getRouteCollection(): RouteCollection
+	{
+		$locator = new FileLocator();
+		$loader = new YamlFileLoader($locator);
+		$routeBuilder = new RouteCollectionBuilder($loader);
+		$routeBuilder->import(__DIR__.'/../../Resources/config/routing/all.yaml');
+
+		return $routeBuilder->build();
+	}
+
 	/**
 	 * @dataProvider loadRoutingProvider
 	 */
 	public function testLoadRouting(string $routeName, string $path, array $methods)
 	{
-		$locator = new FileLocator();
-		$loader = new YamlFileLoader($locator);
-
-		$collection = new RouteCollection();
-		$routePath = __DIR__.'/../../Resources/config/routing/';
-		foreach (Yaml::parseFile($routePath.'all.yaml') as $yaml) {
-			$subCollection = $loader->load($routePath.$yaml['resource']);
-			if (isset($yaml['prefix'])) $subCollection->addPrefix($yaml['prefix']);
-			$collection->addCollection($subCollection);
-		}
+		$collection = $this->getRouteCollection();
 
 		$route = $collection->get($routeName);
 		$this->assertNotNull($route, sprintf('The route "%s" should exists', $routeName));
