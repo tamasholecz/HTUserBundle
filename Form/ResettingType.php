@@ -2,7 +2,6 @@
 
 namespace HT\UserBundle\Form;
 
-use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -11,6 +10,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ResettingType extends AbstractType
 {
+	private $userClass = 'App\Entity\User';
+
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -31,7 +32,7 @@ class ResettingType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([
-			'data_class' => User::class,
+			'data_class' => $this->userClass,
 			'translation_domain' => 'user',
 		]);
 	}

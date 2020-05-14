@@ -2,10 +2,10 @@
 
 namespace HT\UserBundle\EventListener;
 
-use HT\UserBundle\Entity\User;
+use DateTime;
+use HT\UserBundle\Entity\HTUserInterface;
 use HT\UserBundle\Event\UserEvent;
 use HT\UserBundle\HTUserEvents;
-use DateTime;
 use HT\UserBundle\Model\UserManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -31,7 +31,7 @@ class LoginListener implements EventSubscriberInterface
 	public function onLogin(InteractiveLoginEvent $event): void
 	{
 		$user = $event->getAuthenticationToken()->getUser();
-		if ($user instanceof User) $this->setLastLogin($user);
+		if ($user instanceof HTUserInterface) $this->setLastLogin($user);
 	}
 
 	public function onImplicitLogin(UserEvent $event): void
@@ -39,7 +39,7 @@ class LoginListener implements EventSubscriberInterface
 		$this->setLastLogin($event->getUser());
 	}
 
-	public function setLastLogin(User $user)
+	public function setLastLogin(HTUserInterface $user)
 	{
 		$user->setLastLogin(new DateTime());
 		$this->userManager->updateUser($user);

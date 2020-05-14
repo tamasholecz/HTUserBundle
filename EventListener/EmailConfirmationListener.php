@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\EventListener;
 
-use HT\UserBundle\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Mailer\Mailer;
 use HT\UserBundle\HTUserEvents;
@@ -36,7 +36,7 @@ class EmailConfirmationListener implements EventSubscriberInterface
 
 	public function onRegistrationSuccess(FormEvent $event)
 	{
-		/** @var $user User */
+		/** @var HTUserInterface $user */
 		$user = $event->getForm()->getData();
 
 		if (null === $user->getConfirmationToken()) {

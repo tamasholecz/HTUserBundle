@@ -2,9 +2,9 @@
 
 namespace HT\UserBundle\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -14,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username")
  * @ORM\EntityListeners({"HT\UserBundle\EventListener\UserPasswordUpgrader"})
  */
-abstract class User implements UserInterface
+abstract class User implements HTUserInterface
 {
 	/**
 	 * @ORM\Id()
@@ -128,7 +128,7 @@ abstract class User implements UserInterface
 	public function getRoles(): array
 	{
 		$roles = $this->roles;
-		$roles[] = 'ROLE_USER';
+		$roles[] = HTUserInterface::ROLE_DEFAULT;
 
 		return array_unique($roles);
 	}
@@ -184,12 +184,12 @@ abstract class User implements UserInterface
 		$this->plainPassword = null;
 	}
 
-	public function getLastLogin(): ?\DateTimeInterface
+	public function getLastLogin(): ?DateTimeInterface
 	{
 		return $this->lastLogin;
 	}
 
-	public function setLastLogin(?\DateTimeInterface $lastLogin): self
+	public function setLastLogin(?DateTimeInterface $lastLogin): self
 	{
 		$this->lastLogin = $lastLogin;
 
@@ -225,7 +225,7 @@ abstract class User implements UserInterface
 		return $this->passwordRequestedAt;
 	}
 
-	public function setPasswordRequestedAt(?\DateTimeInterface $passwordRequestedAt): self
+	public function setPasswordRequestedAt(?DateTimeInterface $passwordRequestedAt): self
 	{
 		$this->passwordRequestedAt = $passwordRequestedAt;
 

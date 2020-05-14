@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\Doctrine;
 
-use App\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 use HT\UserBundle\Model\UserManager as BaseUserManager;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -15,17 +15,17 @@ class UserManager extends BaseUserManager
 		$this->em = $em;
 	}
 
-	public function findUserBy(array $criteria): ?User
+	public function findUserBy(array $criteria): ?HTUserInterface
 	{
 		return $this->getRepository()->findOneBy($criteria);
 	}
 
 	protected function getRepository()
 	{
-		return $this->em->getRepository(User::class);
+		return $this->em->getRepository($this->userClass);
 	}
 
-	public function updateUser(User $user, $andFlush = true): void
+	public function updateUser(HTUserInterface $user, $andFlush = true): void
 	{
 		$this->em->persist($user);
 		if ($andFlush) {

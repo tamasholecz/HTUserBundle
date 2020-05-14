@@ -2,11 +2,11 @@
 
 namespace HT\UserBundle\Mailer;
 
-use HT\UserBundle\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 
 interface MailerInterface
 {
-	public function sendConfirmationEmailMessage(User $user): void;
+	public function sendConfirmationEmailMessage(HTUserInterface $user): void;
 
-	public function sendResettingEmailMessage(User $user): void;
+	public function sendResettingEmailMessage(HTUserInterface $user): void;
 }

@@ -2,21 +2,21 @@
 
 namespace HT\UserBundle\Model;
 
-use App\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 
 interface UserManagerInterface
 {
-	public function createUser(): User;
+	public function createUser(): HTUserInterface;
 
-	public function findUserBy(array $criteria): ?User;
+	public function findUserBy(array $criteria): ?HTUserInterface;
 
-	public function findUserByUsername($username): ?User;
+	public function findUserByUsername($username): ?HTUserInterface;
 
-	public function findUserByEmail($email): ?User;
+	public function findUserByEmail($email): ?HTUserInterface;
 
-	public function findUserByUsernameOrEmail($usernameOrEmail): ?User;
+	public function findUserByUsernameOrEmail($usernameOrEmail): ?HTUserInterface;
 
-	public function findUserByConfirmationToken($token): ?User;
+	public function findUserByConfirmationToken($token): ?HTUserInterface;
 
-	public function updateUser(User $user): void;
+	public function updateUser(HTUserInterface $user): void;
 }

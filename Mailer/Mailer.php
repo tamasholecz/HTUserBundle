@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\Mailer;
 
-use HT\UserBundle\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class Mailer implements MailerInterface
@@ -17,13 +17,13 @@ class Mailer implements MailerInterface
 		$this->router = $router;
 	}
 
-	public function sendConfirmationEmailMessage(User $user): void
+	public function sendConfirmationEmailMessage(HTUserInterface $user): void
 	{
 		$confirmationUrl = $this->router->generate('user_registration_confirm', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 		$this->mailer->send('@HTUser/registration_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());
 	}
 
-	public function sendResettingEmailMessage(User $user): void
+	public function sendResettingEmailMessage(HTUserInterface $user): void
 	{
 		$confirmationUrl = $this->router->generate('user_resetting_reset', ['token' => $user->getConfirmationToken()], UrlGeneratorInterface::ABSOLUTE_URL);
 		$this->mailer->send('@HTUser/resetting_email.html.twig', ['user' => $user, 'confirmationUrl' => $confirmationUrl], $user->getEmail());

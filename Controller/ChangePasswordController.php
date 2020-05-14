@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\Controller;
 
-use HT\UserBundle\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
 use HT\UserBundle\HTUserEvents;
@@ -27,7 +27,7 @@ class ChangePasswordController extends AbstractController
 	public function changePassword(Request $request): Response
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-		/** @var User $user */
+		/** @var HTUserInterface $user */
 		$user = $this->getUser();
 
 		$event = new UserEvent($user, $request);

@@ -2,26 +2,28 @@
 
 namespace HT\UserBundle\Model;
 
-use App\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 
 abstract class UserManager implements UserManagerInterface
 {
-	public function createUser(): User
+	protected $userClass = 'App\Entity\User';
+
+	public function createUser(): HTUserInterface
 	{
-		return new User();
+		return new $this->userClass();
 	}
 
-	public function findUserByEmail($email): ?User
+	public function findUserByEmail($email): ?HTUserInterface
 	{
 		return $this->findUserBy(['email' => $email]);
 	}
 
-	public function findUserByUsername($username): ?User
+	public function findUserByUsername($username): ?HTUserInterface
 	{
 		return $this->findUserBy(['username' => $username]);
 	}
 
-	public function findUserByUsernameOrEmail($usernameOrEmail): ?User
+	public function findUserByUsernameOrEmail($usernameOrEmail): ?HTUserInterface
 	{
 		if (preg_match('/^.+\@\S+\.\S+$/', $usernameOrEmail)) {
 			$user = $this->findUserByEmail($usernameOrEmail);
@@ -33,7 +35,7 @@ abstract class UserManager implements UserManagerInterface
 		return $this->findUserByUsername($usernameOrEmail);
 	}
 
-	public function findUserByConfirmationToken($token): ?User
+	public function findUserByConfirmationToken($token): ?HTUserInterface
 	{
 		return $this->findUserBy(['confirmationToken' => $token]);
 	}

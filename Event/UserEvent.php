@@ -2,7 +2,7 @@
 
 namespace HT\UserBundle\Event;
 
-use HT\UserBundle\Entity\User;
+use HT\UserBundle\Entity\HTUserInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -13,14 +13,14 @@ class UserEvent extends Event
 	protected $user;
 	private $response;
 
-	public function __construct(User $user, Request $request = null, Response $response = null)
+	public function __construct(HTUserInterface $user, Request $request = null, Response $response = null)
 	{
 		$this->user = $user;
 		$this->request = $request;
 		$this->response = $response;
 	}
 
-	public function getUser(): User
+	public function getUser(): HTUserInterface
 	{
 		return $this->user;
 	}
@@ -30,7 +30,7 @@ class UserEvent extends Event
 		return $this->request;
 	}
 
-	public function setResponse(Response $response)
+	public function setResponse(Response $response): void
 	{
 		$this->response = $response;
 	}
