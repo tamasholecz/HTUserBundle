@@ -21,7 +21,7 @@ class SecurityController extends AbstractController
 		$error = $this->authenticationUtils->getLastAuthenticationError();
 		$lastUsername = $this->authenticationUtils->getLastUsername();
 
-		return $this->render('security/login.html.twig', [
+		return $this->render('@HTUser/login.html.twig', [
 			'error' => $error,
 			'last_username' => $lastUsername,
 			'csrf_token_intention' => 'authenticate',
