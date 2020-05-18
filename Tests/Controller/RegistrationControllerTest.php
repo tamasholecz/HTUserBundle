@@ -121,6 +121,36 @@ class RegistrationControllerTest extends WebTestCase
 
 		$user = $this->getUserManager()->findUserByEmail($email);
 		$this->assertNull($user->getConfirmationToken());
+
+		// Logout
+
+		$client->request('GET', '/logout');
+
+		// Login with old password
+
+		$crawler = $client->request('GET', '/login');
+		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+
+		$form = $crawler->filter('form button[type=submit]')->form([
+			'_username' => $email,
+			'_password' => '1234',
+		]);
+
+		$crawler = $client->submit($form);
+		$crawler = $client->followRedirect();
+
+		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+		$this->assertContains('Invalid credentials.', $crawler->filter('body')->text());
+
+		// Login with new password
+
+		$form = $crawler->filter('form button[type=submit]')->form([
+			'_username' => $email,
+			'_password' => '12345',
+		]);
+
+		$crawler = $client->submit($form);
+		$this->assertSame('/', $client->getResponse()->headers->get('location'));
 	}
 
 	public function getUserManager()
