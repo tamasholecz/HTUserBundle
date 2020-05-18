@@ -114,6 +114,7 @@ class ResettingController extends AbstractController
 			$event = new FormEvent($form, $request);
 			$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_RESET_SUCCESS);
 
+			$user->setConfirmationToken(null);
 			$this->userManager->updateUser($user);
 
 			if (null === $response = $event->getResponse()) {

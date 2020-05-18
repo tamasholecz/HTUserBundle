@@ -1,8 +1,7 @@
 services:
-    HT\UserBundle\:
+    HT\UserBundle\Form\UserRolesType:
         autowire: true
-        autoconfigure: true
-        resource: '../../{Form}'
+        public: true
 
     htuser.user_manager:
         class: HT\UserBundle\Doctrine\UserManager

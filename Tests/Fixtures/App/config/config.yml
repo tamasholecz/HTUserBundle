@@ -1,0 +1,63 @@
+#imports:
+#    - { resource: services.yml }
+
+parameters:
+    locale: en
+    database_path: '%kernel.project_dir%/../../build/test.sqlite'
+    mailer_address: 'test@mailer.com'
+
+framework:
+    secret: secret
+#    translator:
+#        default_path: '%kernel.project_dir%/translations'
+    default_locale: '%locale%'
+    test: ~
+    router: { resource: '%kernel.project_dir%/../../../Resources/config/routing/all.yaml' }
+    form: true
+    validation: { enable_annotations: true }
+    profiler:
+        collect: true
+    session:
+        storage_id: session.storage.mock_file
+
+doctrine:
+    dbal:
+        driver: pdo_sqlite
+        path: '%database_path%'
+    orm:
+        auto_generate_proxy_classes: true
+        auto_mapping: true
+        mappings:
+            App:
+                mapping: true
+                type: annotation
+                dir: '%kernel.project_dir%/Entity'
+                prefix: 'App\Entity'
+                alias: App
+                is_bundle: false
+
+twig:
+    strict_variables: '%kernel.debug%'
+    default_path: '%kernel.project_dir%/templates'
+
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: auto
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            anonymous: ~
+            logout:
+                path: logout
+                target: /
+            guard:
+                authenticators:
+                    - htuser.security.login_form_authenticator
