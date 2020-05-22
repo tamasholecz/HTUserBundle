@@ -1,6 +1,7 @@
 services:
     HT\UserBundle\Form\UserRolesType:
         autowire: true
+        autoconfigure: true
         public: true
 
     ht_user.user_manager:
@@ -24,6 +25,7 @@ services:
             - '@twig'
             - '@parameter_bag'
             - '@swiftmailer.mailer'
+    HT\UserBundle\Mailer\TwigSwiftMailer: '@ht_user.mailer.twig_swift'
 
     ht_user.mailer.default:
         class: HT\UserBundle\Mailer\Mailer
