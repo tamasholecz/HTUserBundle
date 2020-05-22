@@ -3,21 +3,21 @@ services:
         autowire: true
         public: true
 
-    htuser.user_manager:
+    ht_user.user_manager:
         class: HT\UserBundle\Doctrine\UserManager
         public: true
         arguments:
             - '@doctrine.orm.default_entity_manager'
 
-    htuser.security.login_form_authenticator:
+    ht_user.security.login_form_authenticator:
         class: HT\UserBundle\Security\LoginFormAuthenticator
         arguments:
-            - '@htuser.user_manager'
+            - '@ht_user.user_manager'
             - '@router.default'
             - '@security.csrf.token_manager'
             - '@security.user_password_encoder.generic'
 
-    htuser.mailer.twig_swift:
+    ht_user.mailer.twig_swift:
         class: HT\UserBundle\Mailer\TwigSwiftMailer
         public: true
         arguments:
@@ -25,13 +25,13 @@ services:
             - '@parameter_bag'
             - '@swiftmailer.mailer'
 
-    htuser.mailer.default:
+    ht_user.mailer.default:
         class: HT\UserBundle\Mailer\Mailer
         arguments:
-            - '@htuser.mailer.twig_swift'
+            - '@ht_user.mailer.twig_swift'
             - '@router.default'
 
-    htuser.token_generator:
+    ht_user.token_generator:
         class: HT\UserBundle\Util\TokenGenerator
 
     HT\UserBundle\Controller\SecurityController:
@@ -42,47 +42,49 @@ services:
         autowire: true
         public: true
         arguments:
-            $userManager: '@htuser.user_manager'
+            $userManager: '@ht_user.user_manager'
+            $registrationForm: '%ht_user.registration_form%'
 
     HT\UserBundle\Controller\ProfileController:
         autowire: true
         public: true
         arguments:
-            $userManager: '@htuser.user_manager'
+            $userManager: '@ht_user.user_manager'
+            $profileForm: '%ht_user.profile_form%'
 
     HT\UserBundle\Controller\ChangePasswordController:
         autowire: true
         public: true
         arguments:
-            $userManager: '@htuser.user_manager'
+            $userManager: '@ht_user.user_manager'
 
     HT\UserBundle\Controller\ResettingController:
         autowire: true
         public: true
         arguments:
-            $userManager: '@htuser.user_manager'
-            $tokenGenerator: '@htuser.token_generator'
-            $mailer: '@htuser.mailer.default'
+            $userManager: '@ht_user.user_manager'
+            $tokenGenerator: '@ht_user.token_generator'
+            $mailer: '@ht_user.mailer.default'
 
     HT\UserBundle\EventListener\AuthenticationListener:
         tags: [kernel.event_subscriber]
         arguments:
             - '@security.authentication.guard_handler'
-            - '@htuser.security.login_form_authenticator'
+            - '@ht_user.security.login_form_authenticator'
             - '@event_dispatcher'
 
     HT\UserBundle\EventListener\EmailConfirmationListener:
         tags: [kernel.event_subscriber]
         arguments:
-            - '@htuser.mailer.default'
-            - '@htuser.token_generator'
+            - '@ht_user.mailer.default'
+            - '@ht_user.token_generator'
             - '@router.default'
             - '@session'
 
     HT\UserBundle\EventListener\LoginListener:
         tags: [kernel.event_subscriber]
         arguments:
-            - '@htuser.user_manager'
+            - '@ht_user.user_manager'
 
     HT\UserBundle\EventListener\UserPasswordUpgrader:
         arguments:

@@ -60,4 +60,4 @@ security:
                 target: /
             guard:
                 authenticators:
-                    - htuser.security.login_form_authenticator
+                    - ht_user.security.login_form_authenticator

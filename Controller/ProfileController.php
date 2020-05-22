@@ -17,11 +17,13 @@ class ProfileController extends AbstractController
 {
 	private $userManager;
 	private $dispatcher;
+	private $profileForm;
 
-	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher)
+	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, string $profileForm)
 	{
 		$this->userManager = $userManager;
 		$this->dispatcher = $dispatcher;
+		$this->profileForm = $profileForm;
 	}
 
 	public function show(): Response
@@ -46,7 +48,7 @@ class ProfileController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm(\HT\UserBundle\Form\ProfileType::class, $user);
+		$form = $this->createForm($this->profileForm, $user);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {

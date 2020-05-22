@@ -17,11 +17,13 @@ class RegistrationController extends AbstractController
 {
 	private $userManager;
 	private $dispatcher;
+	private $registrationForm;
 
-	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher)
+	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, string $registrationForm)
 	{
 		$this->userManager = $userManager;
 		$this->dispatcher = $dispatcher;
+		$this->registrationForm = $registrationForm;
 	}
 
 	public function register(Request $request): Response
@@ -34,7 +36,7 @@ class RegistrationController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm(\HT\UserBundle\Form\RegistrationType::class, $user);
+		$form = $this->createForm($this->registrationForm, $user);
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {

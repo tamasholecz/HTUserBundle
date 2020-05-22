@@ -155,6 +155,6 @@ class RegistrationControllerTest extends WebTestCase
 
 	public function getUserManager()
 	{
-		return $this->appKernel->getContainer()->get('htuser.user_manager');
+		return $this->appKernel->getContainer()->get('ht_user.user_manager');
 	}
 }
