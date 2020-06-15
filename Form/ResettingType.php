@@ -10,8 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ResettingType extends AbstractType
 {
-	private $userClass = 'App\Entity\User';
-
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -32,7 +30,6 @@ class ResettingType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([
-			'data_class' => $this->userClass,
 			'translation_domain' => 'user',
 		]);
 	}

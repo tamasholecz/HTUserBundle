@@ -36,7 +36,7 @@ class ChangePasswordController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm(\HT\UserBundle\Form\ChangePasswordType::class, $user);
+		$form = $this->createForm(\HT\UserBundle\Form\ChangePasswordType::class, $user, ['data_class' => $this->userManager->getUserClass()]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$event = new FormEvent($form, $request);

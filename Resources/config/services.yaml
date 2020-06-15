@@ -9,6 +9,7 @@ services:
         public: true
         arguments:
             - '@doctrine.orm.default_entity_manager'
+            - '%ht_user.model.user.class%'
 
     ht_user.security.login_form_authenticator:
         class: HT\UserBundle\Security\LoginFormAuthenticator

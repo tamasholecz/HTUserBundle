@@ -6,7 +6,7 @@ use HT\UserBundle\Entity\HTUserInterface;
 
 abstract class UserManager implements UserManagerInterface
 {
-	protected $userClass = 'App\Entity\User';
+	protected $userClass;
 
 	public function createUser(): HTUserInterface
 	{
@@ -38,5 +38,10 @@ abstract class UserManager implements UserManagerInterface
 	public function findUserByConfirmationToken($token): ?HTUserInterface
 	{
 		return $this->findUserBy(['confirmationToken' => $token]);
+	}
+
+	public function getUserClass(): string
+	{
+		return $this->userClass;
 	}
 }

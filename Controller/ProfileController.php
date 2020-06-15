@@ -48,7 +48,7 @@ class ProfileController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm($this->profileForm, $user);
+		$form = $this->createForm($this->profileForm, $user, ['data_class' => $this->userManager->getUserClass()]);
 		$form->handleRequest($request);
 
 		if ($form->isSubmitted() && $form->isValid()) {

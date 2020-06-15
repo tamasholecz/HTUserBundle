@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm($this->registrationForm, $user);
+		$form = $this->createForm($this->registrationForm, $user, ['data_class' => $this->userManager->getUserClass()]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted()) {
 			if ($form->isValid()) {

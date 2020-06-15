@@ -8,8 +8,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProfileType extends AbstractType
 {
-	private $userClass = 'App\Entity\User';
-
 	public function buildForm(FormBuilderInterface $builder, array $options)
 	{
 		$builder
@@ -21,7 +19,6 @@ class ProfileType extends AbstractType
 	public function configureOptions(OptionsResolver $resolver)
 	{
 		$resolver->setDefaults([
-			'data_class' => $this->userClass,
 			'translation_domain' => 'user',
 		]);
 	}

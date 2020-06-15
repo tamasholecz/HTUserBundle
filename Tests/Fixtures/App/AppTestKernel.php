@@ -4,7 +4,7 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 
-class AppKernel extends Kernel
+class AppTestKernel extends Kernel
 {
 	public function __construct()
 	{

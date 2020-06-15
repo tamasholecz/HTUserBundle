@@ -12,13 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationControllerTest extends WebTestCase
 {
-	/** @var \AppKernel */
+	/** @var \AppTestKernel */
 	private $appKernel;
 
 	public function testRegister()
 	{
-		require __DIR__.'/../Fixtures/App/AppKernel.php';
-		$this->appKernel = new \AppKernel();
+		require __DIR__.'/../Fixtures/App/AppTestKernel.php';
+		$this->appKernel = new \AppTestKernel();
 
 		$application = new Application($this->appKernel);
 		$application->setAutoExit(false);

@@ -15,6 +15,7 @@ class Configuration implements ConfigurationInterface
 
 		$treeBuilder->getRootNode()
 			->children()
+				->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
 				->scalarNode('registration_form')->defaultValue(RegistrationType::class)->end()
 				->scalarNode('profile_form')->defaultValue(ProfileType::class)->end()
 			->end()

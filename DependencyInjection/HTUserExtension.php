@@ -17,6 +17,7 @@ class HTUserExtension extends Extension
 		$configuration = new Configuration();
 		$config = $this->processConfiguration($configuration, $configs);
 
+		$container->setParameter('ht_user.model.user.class', $config['user_class']);
 		$container->setParameter('ht_user.registration_form', $config['registration_form']);
 		$container->setParameter('ht_user.profile_form', $config['profile_form']);
 	}

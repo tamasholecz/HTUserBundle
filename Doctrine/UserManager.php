@@ -10,9 +10,10 @@ class UserManager extends BaseUserManager
 {
 	protected $em;
 
-	public function __construct(EntityManagerInterface $em)
+	public function __construct(EntityManagerInterface $em, string $userClass)
 	{
 		$this->em = $em;
+		$this->userClass = $userClass;
 	}
 
 	public function findUserBy(array $criteria): ?HTUserInterface

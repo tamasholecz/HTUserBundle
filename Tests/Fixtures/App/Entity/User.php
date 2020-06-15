@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace AppTest\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use HT\UserBundle\Entity\User as BaseUser;
