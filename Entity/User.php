@@ -6,6 +6,8 @@ use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\MappedSuperclass;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\EquatableInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,14 +16,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("username")
  * @ORM\EntityListeners({"HT\UserBundle\EventListener\UserPasswordUpgrader"})
  */
-abstract class User implements HTUserInterface
+abstract class User implements HTUserInterface, EquatableInterface, \Serializable
 {
 	/**
 	 * @ORM\Id()
 	 * @ORM\GeneratedValue(strategy="UUID")
 	 * @ORM\Column(type="guid")
 	 */
-	private $id;
+	protected $id;
 
 	/**
 	 * @ORM\Column(type="string", length=180, unique=true)
@@ -85,6 +87,25 @@ abstract class User implements HTUserInterface
 	public function __toString()
 	{
 		return $this->getName() ? $this->getName() : $this->getUsername();
+	}
+
+	public function serialize()
+	{
+		return serialize([$this->id, $this->password, $this->username, $this->email, $this->enabled]);
+	}
+
+	public function unserialize($serialized)
+	{
+		list($this->id, $this->password, $this->username, $this->email, $this->enabled) = unserialize($serialized);
+	}
+
+	public function isEqualTo(UserInterface $user)
+	{
+		return $this->getId() === $user->getId() &&
+			$this->getPassword() === $user->getPassword() &&
+			$this->getUsername() === $user->getUsername() &&
+			$this->getEmail() === $user->getEmail() &&
+			$this->getEnabled() === $user->getEnabled();
 	}
 
 	public function getId(): ?string
