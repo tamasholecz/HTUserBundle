@@ -1,8 +1,5 @@
 imports:
     - { resource: config.yml }
 
-swiftmailer:
-    disable_delivery: true
-
 ht_user:
     user_class: AppTest\Entity\User

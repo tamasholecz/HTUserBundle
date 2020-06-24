@@ -8,8 +8,8 @@ parameters:
 
 framework:
     secret: secret
-#    translator:
-#        default_path: '%kernel.project_dir%/translations'
+    translator:
+        default_path: '%kernel.project_dir%/translations'
     default_locale: '%locale%'
     test: ~
     router: { resource: '%kernel.project_dir%/../../../Resources/config/routing/all.yaml' }
@@ -19,6 +19,8 @@ framework:
         collect: true
     session:
         storage_id: session.storage.mock_file
+    mailer:
+        dsn: 'null://null'
 
 doctrine:
     dbal:

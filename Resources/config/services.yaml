@@ -19,20 +19,13 @@ services:
             - '@security.csrf.token_manager'
             - '@security.user_password_encoder.generic'
 
-    ht_user.mailer.twig_swift:
-        class: HT\UserBundle\Mailer\TwigSwiftMailer
-        public: true
-        arguments:
-            - '@twig'
-            - '@parameter_bag'
-            - '@swiftmailer.mailer'
-    HT\UserBundle\Mailer\TwigSwiftMailer: '@ht_user.mailer.twig_swift'
-
     ht_user.mailer.default:
-        class: HT\UserBundle\Mailer\Mailer
+        class: HT\UserBundle\Mailer\UserMailer
         arguments:
-            - '@ht_user.mailer.twig_swift'
+            - '@mailer'
             - '@router.default'
+            - '@translator'
+            - '@parameter_bag'
 
     ht_user.token_generator:
         class: HT\UserBundle\Util\TokenGenerator

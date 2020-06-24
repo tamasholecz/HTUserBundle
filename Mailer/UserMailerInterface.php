@@ -4,7 +4,7 @@ namespace HT\UserBundle\Mailer;
 
 use HT\UserBundle\Entity\HTUserInterface;
 
-interface MailerInterface
+interface UserMailerInterface
 {
 	public function sendConfirmationEmailMessage(HTUserInterface $user): void;
 

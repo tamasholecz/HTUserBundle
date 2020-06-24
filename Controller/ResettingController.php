@@ -4,7 +4,7 @@ namespace HT\UserBundle\Controller;
 
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
-use HT\UserBundle\Mailer\Mailer;
+use HT\UserBundle\Mailer\UserMailer;
 use HT\UserBundle\HTUserEvents;
 use HT\UserBundle\Model\UserManagerInterface;
 use HT\UserBundle\Util\TokenGeneratorInterface;
@@ -23,7 +23,7 @@ class ResettingController extends AbstractController
 
 	private $retryTtl = 7200;
 
-	public function __construct(UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator, Mailer $mailer, EventDispatcherInterface $dispatcher)
+	public function __construct(UserManagerInterface $userManager, TokenGeneratorInterface $tokenGenerator, UserMailer $mailer, EventDispatcherInterface $dispatcher)
 	{
 		$this->userManager = $userManager;
 		$this->tokenGenerator = $tokenGenerator;

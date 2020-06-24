@@ -4,7 +4,7 @@ namespace HT\UserBundle\EventListener;
 
 use HT\UserBundle\Entity\HTUserInterface;
 use HT\UserBundle\Event\FormEvent;
-use HT\UserBundle\Mailer\Mailer;
+use HT\UserBundle\Mailer\UserMailer;
 use HT\UserBundle\HTUserEvents;
 use HT\UserBundle\Util\TokenGeneratorInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -19,7 +19,7 @@ class EmailConfirmationListener implements EventSubscriberInterface
 	private $router;
 	private $session;
 
-	public function __construct(Mailer $mailer, TokenGeneratorInterface $tokenGenerator, UrlGeneratorInterface $router, SessionInterface $session)
+	public function __construct(UserMailer $mailer, TokenGeneratorInterface $tokenGenerator, UrlGeneratorInterface $router, SessionInterface $session)
 	{
 		$this->mailer = $mailer;
 		$this->tokenGenerator = $tokenGenerator;
