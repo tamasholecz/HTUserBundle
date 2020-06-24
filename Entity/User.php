@@ -32,7 +32,7 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 	private $email;
 
 	/**
-	 * @ORM\Column(type="string", length=50, unique=true)
+	 * @ORM\Column(type="string", length=180, unique=true)
 	 */
 	private $username;
 
