@@ -4,7 +4,7 @@
 parameters:
     locale: en
     database_path: '%kernel.project_dir%/../../build/test.sqlite'
-    mailer_address: 'test@mailer.com'
+    mailer_sender: 'test@mailer.com'
 
 framework:
     secret: secret
