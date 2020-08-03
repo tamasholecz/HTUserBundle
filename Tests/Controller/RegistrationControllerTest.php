@@ -143,7 +143,8 @@ class RegistrationControllerTest extends WebTestCase
 		$this->assertContains('Invalid credentials.', $crawler->filter('body')->text());
 
 		// Login with new password
-
+		
+		$crawler = $client->request('GET', '/login?_target_path=/');
 		$form = $crawler->filter('form button[type=submit]')->form([
 			'_username' => $email,
 			'_password' => '12345',
