@@ -28,7 +28,7 @@ class ProfileController extends AbstractController
 
 	public function show(): Response
 	{
-		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
 		return $this->render('@HTUser/profile_show.html.twig', [
 			'user' => $this->getUser(),
@@ -37,7 +37,7 @@ class ProfileController extends AbstractController
 
 	public function edit(Request $request): Response
 	{
-		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 		/** @var HTUserInterface $user */
 		$user = $this->getUser();
 

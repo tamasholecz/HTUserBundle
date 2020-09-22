@@ -26,7 +26,7 @@ class ChangePasswordController extends AbstractController
 
 	public function changePassword(Request $request): Response
 	{
-		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 		/** @var HTUserInterface $user */
 		$user = $this->getUser();
 

@@ -113,7 +113,7 @@ class RegistrationController extends AbstractController
 
 	public function confirmed(Request $request): Response
 	{
-		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_REMEMBERED');
 
 		return $this->render(
 			'@HTUser/registration_confirmed.html.twig', [
