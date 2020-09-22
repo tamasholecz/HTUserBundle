@@ -125,7 +125,7 @@ final class HTUserEvents
 	const SECURITY_IMPLICIT_LOGIN = 'user.security.implicit_login';
 
 	/**
-	 * @Event("HT\UserBundle\Event\GetResponseNullableUserEvent")
+	 * @Event("HT\UserBundle\Event\UserNullableEvent")
 	 */
 	const RESETTING_SEND_EMAIL_INITIALIZE = 'user.resetting.send_email.initialize';
 

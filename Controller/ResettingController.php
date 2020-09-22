@@ -4,6 +4,7 @@ namespace HT\UserBundle\Controller;
 
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
+use HT\UserBundle\Event\UserNullableEvent;
 use HT\UserBundle\Mailer\UserMailer;
 use HT\UserBundle\HTUserEvents;
 use HT\UserBundle\Model\UserManagerInterface;
@@ -38,12 +39,11 @@ class ResettingController extends AbstractController
 
 	public function sendEmail(Request $request)
 	{
-		$username = $request->request->get('username');
+		$username = trim($request->request->get('username'));
 
 		$user = $this->userManager->findUserByUsernameOrEmail($username);
-		// TODO: if user null
 
-		$event = new UserEvent($user, $request);
+		$event = new UserNullableEvent($user, $request);
 		$this->dispatcher->dispatch($event, HTUserEvents::RESETTING_SEND_EMAIL_INITIALIZE);
 		if (null !== $event->getResponse()) {
 			return $event->getResponse();

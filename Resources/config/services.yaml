@@ -88,3 +88,8 @@ services:
         tags:
             - { name: doctrine.orm.entity_listener, event: 'prePersist', lazy: true }
             - { name: doctrine.orm.entity_listener, event: 'preUpdate', lazy: true }
+
+    HT\UserBundle\EventListener\ResettingListener:
+        tags: [kernel.event_subscriber]
+        arguments:
+            - '@router.default'
