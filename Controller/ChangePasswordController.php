@@ -17,11 +17,13 @@ class ChangePasswordController extends AbstractController
 {
 	private $userManager;
 	private $dispatcher;
+	private $changePasswordForm;
 
-	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher)
+	public function __construct(UserManagerInterface $userManager, EventDispatcherInterface $dispatcher, string $changePasswordForm)
 	{
 		$this->userManager = $userManager;
 		$this->dispatcher = $dispatcher;
+		$this->changePasswordForm = $changePasswordForm;
 	}
 
 	public function changePassword(Request $request): Response
@@ -36,7 +38,7 @@ class ChangePasswordController extends AbstractController
 			return $event->getResponse();
 		}
 
-		$form = $this->createForm(\HT\UserBundle\Form\ChangePasswordType::class, $user, ['data_class' => $this->userManager->getUserClass()]);
+		$form = $this->createForm($this->changePasswordForm, $user, ['data_class' => $this->userManager->getUserClass()]);
 		$form->handleRequest($request);
 		if ($form->isSubmitted() && $form->isValid()) {
 			$event = new FormEvent($form, $request);

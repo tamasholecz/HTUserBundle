@@ -20,5 +20,6 @@ class HTUserExtension extends Extension
 		$container->setParameter('ht_user.model.user.class', $config['user_class']);
 		$container->setParameter('ht_user.registration_form', $config['registration_form']);
 		$container->setParameter('ht_user.profile_form', $config['profile_form']);
+		$container->setParameter('ht_user.change_password_form', $config['change_password_form']);
 	}
 }

@@ -53,6 +53,7 @@ services:
         public: true
         arguments:
             $userManager: '@ht_user.user_manager'
+            $changePasswordForm: '%ht_user.change_password_form%'
 
     HT\UserBundle\Controller\ResettingController:
         autowire: true

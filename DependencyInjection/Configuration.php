@@ -2,6 +2,7 @@
 
 namespace HT\UserBundle\DependencyInjection;
 
+use HT\UserBundle\Form\ChangePasswordType;
 use HT\UserBundle\Form\ProfileType;
 use HT\UserBundle\Form\RegistrationType;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -18,6 +19,7 @@ class Configuration implements ConfigurationInterface
 				->scalarNode('user_class')->isRequired()->cannotBeEmpty()->end()
 				->scalarNode('registration_form')->defaultValue(RegistrationType::class)->end()
 				->scalarNode('profile_form')->defaultValue(ProfileType::class)->end()
+				->scalarNode('change_password_form')->defaultValue(ChangePasswordType::class)->end()
 			->end()
 		;
 
