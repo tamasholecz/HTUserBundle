@@ -2,7 +2,6 @@
 
 namespace HT\UserBundle\EventListener;
 
-use Doctrine\Common\Persistence\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 use HT\UserBundle\Entity\HTUserInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -16,7 +15,7 @@ class UserPasswordUpgrader
 		$this->passwordEncoder = $passwordEncoder;
 	}
 
-	public function prePersist(HTUserInterface $user, LifecycleEventArgs $event)
+	public function prePersist(HTUserInterface $user, $event)// $event Doctrine\Common\Persistence\Event\LifecycleEventArgs | Doctrine\ORM\Event\LifecycleEventArgs
 	{
 		$this->updatePassword($user);
 	}
