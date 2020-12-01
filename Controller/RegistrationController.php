@@ -4,6 +4,7 @@ namespace HT\UserBundle\Controller;
 
 use HT\UserBundle\Event\FormEvent;
 use HT\UserBundle\Event\UserEvent;
+use HT\UserBundle\Event\UserNullableEvent;
 use HT\UserBundle\HTUserEvents;
 use HT\UserBundle\Model\UserManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,6 +90,12 @@ class RegistrationController extends AbstractController
 	public function confirm(Request $request, string $token): Response
 	{
 		$user = $this->userManager->findUserBy(['confirmationToken' => $token]);
+
+		$event = new UserNullableEvent($user, $request);
+		$this->dispatcher->dispatch($event, HTUserEvents::REGISTRATION_INIT_CONFIRM);
+		if (null !== $event->getResponse()) {
+			return $event->getResponse();
+		}
 
 		if (null === $user) {
 			throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));

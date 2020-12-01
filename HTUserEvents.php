@@ -90,6 +90,11 @@ final class HTUserEvents
 	const REGISTRATION_COMPLETED = 'user.registration.completed';
 
 	/**
+	 * @Event("HT\UserBundle\Event\UserNullableEvent")
+	 */
+	const REGISTRATION_INIT_CONFIRM = 'user.registration.init_confirm';
+
+	/**
 	 * @Event("HT\UserBundle\Event\UserEvent")
 	 */
 	const REGISTRATION_CONFIRM = 'user.registration.confirm';
