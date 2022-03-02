@@ -127,9 +127,9 @@ class ResettingController extends AbstractController
 			return $response;
 		}
 
-		return $this->render('@HTUser/resetting_reset.html.twig', array(
+		return $this->render('@HTUser/resetting_reset.html.twig', [
 			'token' => $token,
 			'form' => $form->createView(),
-		));
+		]);
 	}
 }

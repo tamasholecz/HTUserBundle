@@ -11,7 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RegistrationController extends AbstractController
@@ -98,7 +97,8 @@ class RegistrationController extends AbstractController
 		}
 
 		if (null === $user) {
-			throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
+//			throw new NotFoundHttpException(sprintf('The user with confirmation token "%s" does not exist', $token));
+			return new RedirectResponse($this->generateUrl('login'));
 		}
 
 		$user->setConfirmationToken(null);
