@@ -6,42 +6,42 @@ use Symfony\Component\HttpKernel\Kernel;
 
 class AppTestKernel extends Kernel
 {
-	public function __construct()
-	{
-		parent::__construct('test', true);
-	}
+    public function __construct()
+    {
+        parent::__construct('test', true);
+    }
 
-	public function registerBundles()
-	{
-		return [
-			new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-			new Symfony\Bundle\SecurityBundle\SecurityBundle(),
-			new Symfony\Bundle\TwigBundle\TwigBundle(),
-			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-			new \HT\UserBundle\HTUserBundle,
-		];
-	}
+    public function registerBundles()
+    {
+        return [
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+            new Symfony\Bundle\TwigBundle\TwigBundle(),
+            new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new \HT\UserBundle\HTUserBundle,
+        ];
+    }
 
-	public function registerContainerConfiguration(LoaderInterface $loader)
-	{
-		$loader->load(__DIR__.'\config\config_'.$this->getEnvironment().'.yml');
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load(__DIR__.'\config\config_'.$this->getEnvironment().'.yml');
 
-		$loader->load(function (ContainerBuilder $container) {
-		});
-	}
+        $loader->load(function (ContainerBuilder $container) {
+        });
+    }
 
-	public function getProjectDir(): string
-	{
-		return __DIR__;
-	}
+    public function getProjectDir(): string
+    {
+        return __DIR__;
+    }
 
-	public function getCacheDir(): string
-	{
-		return __DIR__.'/../../build/cache/'.$this->getEnvironment();
-	}
+    public function getCacheDir(): string
+    {
+        return __DIR__.'/../../build/cache/'.$this->getEnvironment();
+    }
 
-	public function getLogDir(): string
-	{
-		return __DIR__.'/../../build/kernel_logs/'.$this->getEnvironment();
-	}
+    public function getLogDir(): string
+    {
+        return __DIR__.'/../../build/kernel_logs/'.$this->getEnvironment();
+    }
 }

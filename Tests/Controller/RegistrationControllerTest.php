@@ -12,150 +12,150 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegistrationControllerTest extends WebTestCase
 {
-	/** @var \AppTestKernel */
-	private $appKernel;
+    /** @var \AppTestKernel */
+    private $appKernel;
 
-	public function testRegister()
-	{
-		require __DIR__.'/../Fixtures/App/AppTestKernel.php';
-		$this->appKernel = new \AppTestKernel();
+    public function testRegister()
+    {
+        require __DIR__.'/../Fixtures/App/AppTestKernel.php';
+        $this->appKernel = new \AppTestKernel();
 
-		$application = new Application($this->appKernel);
-		$application->setAutoExit(false);
+        $application = new Application($this->appKernel);
+        $application->setAutoExit(false);
 
-		$input = new ArrayInput(['command' => 'doctrine:schema:drop', '-f' => true]);
-		$application->run($input, new ConsoleOutput());
-		$input = new ArrayInput(['command' => 'doctrine:schema:update', '-f' => true]);//, '--dump-sql' => true
-		$application->run($input, new ConsoleOutput());
+        $input = new ArrayInput(['command' => 'doctrine:schema:drop', '-f' => true]);
+        $application->run($input, new ConsoleOutput());
+        $input = new ArrayInput(['command' => 'doctrine:schema:update', '-f' => true]);//, '--dump-sql' => true
+        $application->run($input, new ConsoleOutput());
 
-		unset($input, $application);
+        unset($input, $application);
 
-		$client = new KernelBrowser($this->appKernel);
-		$crawler = $client->request('GET', '/registration');
-		$crawler = $client->followRedirect();
+        $client = new KernelBrowser($this->appKernel);
+        $crawler = $client->request('GET', '/registration');
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$email = 'test@test.hu';
-		$form = $crawler->filter('form button[type=submit]')->form([
-			'registration[email]' => $email,
-			'registration[username]' => 'test',
-			'registration[plainPassword][first]' => '1234',
-			'registration[plainPassword][second]' => '1234',
-			'registration[name]' => 'Teszt Elek',
-			'registration[phone]' => '+36301234567',
-		]);
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $email = 'test@test.hu';
+        $form = $crawler->filter('form button[type=submit]')->form([
+            'registration[email]' => $email,
+            'registration[username]' => 'test',
+            'registration[plainPassword][first]' => '1234',
+            'registration[plainPassword][second]' => '1234',
+            'registration[name]' => 'Teszt Elek',
+            'registration[phone]' => '+36301234567',
+        ]);
 
-		$crawler = $client->submit($form);
-		$crawler = $client->followRedirect();
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertSame('Registration check email', $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSame('Registration check email', $crawler->filter('body')->text());
 
-		/** @var HTUserInterface $user */
-		$user = $this->getUserManager()->findUserByEmail($email);
-		$this->assertSame('test', $user->getUserName());
-		$this->assertFalse($user->getEnabled());
+        /** @var HTUserInterface $user */
+        $user = $this->getUserManager()->findUserByEmail($email);
+        $this->assertSame('test', $user->getUserName());
+        $this->assertFalse($user->getEnabled());
 
-		// Try show profile (disabled)
+        // Try show profile (disabled)
 
-		$client->request('GET', '/profile/');
-		$this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $client->request('GET', '/profile/');
+        $this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
 
-		// Registration confirm
+        // Registration confirm
 
-		$crawler = $client->request('GET', '/registration/confirm/'.$user->getConfirmationToken());
-		$crawler = $client->followRedirect();
+        $crawler = $client->request('GET', '/registration/confirm/'.$user->getConfirmationToken());
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertSame('Registration confirmed', $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSame('Registration confirmed', $crawler->filter('body')->text());
 
-		$user = $this->getUserManager()->findUserByEmail($email);
+        $user = $this->getUserManager()->findUserByEmail($email);
 
-		$this->asserttrue($user->getEnabled());
-		$this->assertNull($user->getConfirmationToken());
-		$this->assertNotNull($user->getLastLogin());
+        $this->asserttrue($user->getEnabled());
+        $this->assertNull($user->getConfirmationToken());
+        $this->assertNotNull($user->getLastLogin());
 
-		// Show profile
+        // Show profile
 
-		$crawler = $client->request('GET', '/profile/');
+        $crawler = $client->request('GET', '/profile/');
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertContains('Email: '.$email, $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertContains('Email: '.$email, $crawler->filter('body')->text());
 
-		// Logout
+        // Logout
 
-		$crawler = $client->request('GET', '/logout');
-		$this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
-		$this->assertSame('http://localhost/', $client->getResponse()->headers->get('location'));
+        $crawler = $client->request('GET', '/logout');
+        $this->assertSame(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        $this->assertSame('http://localhost/', $client->getResponse()->headers->get('location'));
 
-		// Resetting password
+        // Resetting password
 
-		$crawler = $client->request('GET', '/resetting/request');
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/resetting/request');
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
-		$form = $crawler->filter('form button[type=submit]')->form([
-			'username' => $email,
-		]);
+        $form = $crawler->filter('form button[type=submit]')->form([
+            'username' => $email,
+        ]);
 
-		$crawler = $client->submit($form);
-		$crawler = $client->followRedirect();
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertSame('Resetting check email', $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertSame('Resetting check email', $crawler->filter('body')->text());
 
-		$user = $this->getUserManager()->findUserByEmail($email);
+        $user = $this->getUserManager()->findUserByEmail($email);
 
-		$crawler = $client->request('GET', '/resetting/reset/'.$user->getConfirmationToken());
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/resetting/reset/'.$user->getConfirmationToken());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
-		$form = $crawler->filter('form button[type=submit]')->form([
-			'resetting[plainPassword][first]' => '12345',
-			'resetting[plainPassword][second]' => '12345',
-		]);
+        $form = $crawler->filter('form button[type=submit]')->form([
+            'resetting[plainPassword][first]' => '12345',
+            'resetting[plainPassword][second]' => '12345',
+        ]);
 
-		$crawler = $client->submit($form);
-		$crawler = $client->followRedirect();
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertContains('Email: '.$email, $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertContains('Email: '.$email, $crawler->filter('body')->text());
 
-		$user = $this->getUserManager()->findUserByEmail($email);
-		$this->assertNull($user->getConfirmationToken());
+        $user = $this->getUserManager()->findUserByEmail($email);
+        $this->assertNull($user->getConfirmationToken());
 
-		// Logout
+        // Logout
 
-		$client->request('GET', '/logout');
+        $client->request('GET', '/logout');
 
-		// Login with old password
+        // Login with old password
 
-		$crawler = $client->request('GET', '/login');
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/login');
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
-		$form = $crawler->filter('form button[type=submit]')->form([
-			'_username' => $email,
-			'_password' => '1234',
-		]);
+        $form = $crawler->filter('form button[type=submit]')->form([
+            '_username' => $email,
+            '_password' => '1234',
+        ]);
 
-		$crawler = $client->submit($form);
-		$crawler = $client->followRedirect();
+        $crawler = $client->submit($form);
+        $crawler = $client->followRedirect();
 
-		$this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
-		$this->assertContains('Invalid credentials.', $crawler->filter('body')->text());
+        $this->assertSame(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        $this->assertContains('Invalid credentials.', $crawler->filter('body')->text());
 
-		// Login with new password
-		
-		$crawler = $client->request('GET', '/login?_target_path=/');
-		$form = $crawler->filter('form button[type=submit]')->form([
-			'_username' => $email,
-			'_password' => '12345',
-		]);
+        // Login with new password
 
-		$crawler = $client->submit($form);
-		$this->assertSame('/', $client->getResponse()->headers->get('location'));
-	}
+        $crawler = $client->request('GET', '/login?_target_path=/');
+        $form = $crawler->filter('form button[type=submit]')->form([
+            '_username' => $email,
+            '_password' => '12345',
+        ]);
 
-	public function getUserManager()
-	{
-		return $this->appKernel->getContainer()->get('ht_user.user_manager');
-	}
+        $crawler = $client->submit($form);
+        $this->assertSame('/', $client->getResponse()->headers->get('location'));
+    }
+
+    public function getUserManager()
+    {
+        return $this->appKernel->getContainer()->get('ht_user.user_manager');
+    }
 }

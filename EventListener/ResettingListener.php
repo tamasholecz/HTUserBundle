@@ -10,28 +10,28 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ResettingListener implements EventSubscriberInterface
 {
-	private $router;
+    private $router;
 
-	public function __construct(UrlGeneratorInterface $router)
-	{
-		$this->router = $router;
-	}
+    public function __construct(UrlGeneratorInterface $router)
+    {
+        $this->router = $router;
+    }
 
-	/**
-	 * @return array
-	 */
-	public static function getSubscribedEvents()
-	{
-		return [
-			HTUserEvents::RESETTING_SEND_EMAIL_INITIALIZE => 'resettingInitilize',
-		];
-	}
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            HTUserEvents::RESETTING_SEND_EMAIL_INITIALIZE => 'resettingInitilize',
+        ];
+    }
 
-	public function resettingInitilize(UserNullableEvent $event)
-	{
-		if (null === $event->getUser()) {
-			$url = $this->router->generate('user_resetting_request');
-			$event->setResponse(new RedirectResponse($url));
-		}
-	}
+    public function resettingInitilize(UserNullableEvent $event)
+    {
+        if (null === $event->getUser()) {
+            $url = $this->router->generate('user_resetting_request');
+            $event->setResponse(new RedirectResponse($url));
+        }
+    }
 }

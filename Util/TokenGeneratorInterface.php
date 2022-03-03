@@ -4,5 +4,5 @@ namespace HT\UserBundle\Util;
 
 interface TokenGeneratorInterface
 {
-	public function generateToken(): string;
+    public function generateToken(): string;
 }

@@ -13,38 +13,38 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class LoginListener implements EventSubscriberInterface
 {
-	private $userManager;
+    private $userManager;
 
-	public function __construct(UserManagerInterface $userManager)
-	{
-		$this->userManager = $userManager;
-	}
+    public function __construct(UserManagerInterface $userManager)
+    {
+        $this->userManager = $userManager;
+    }
 
-	/**
-	 * @return array
-	 */
-	public static function getSubscribedEvents()
-	{
-		return [
-			SecurityEvents::INTERACTIVE_LOGIN => 'onLogin',
-			HTUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
-		];
-	}
+    /**
+     * @return array
+     */
+    public static function getSubscribedEvents()
+    {
+        return [
+            SecurityEvents::INTERACTIVE_LOGIN => 'onLogin',
+            HTUserEvents::SECURITY_IMPLICIT_LOGIN => 'onImplicitLogin',
+        ];
+    }
 
-	public function onLogin(InteractiveLoginEvent $event): void
-	{
-		$user = $event->getAuthenticationToken()->getUser();
-		if ($user instanceof HTUserInterface) $this->setLastLogin($user);
-	}
+    public function onLogin(InteractiveLoginEvent $event): void
+    {
+        $user = $event->getAuthenticationToken()->getUser();
+        if ($user instanceof HTUserInterface) $this->setLastLogin($user);
+    }
 
-	public function onImplicitLogin(UserEvent $event): void
-	{
-		$this->setLastLogin($event->getUser());
-	}
+    public function onImplicitLogin(UserEvent $event): void
+    {
+        $this->setLastLogin($event->getUser());
+    }
 
-	public function setLastLogin(HTUserInterface $user)
-	{
-		$user->setLastLogin(new DateTime());
-		$this->userManager->updateUser($user);
-	}
+    public function setLastLogin(HTUserInterface $user)
+    {
+        $user->setLastLogin(new DateTime());
+        $this->userManager->updateUser($user);
+    }
 }

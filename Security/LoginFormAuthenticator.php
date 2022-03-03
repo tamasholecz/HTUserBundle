@@ -21,84 +21,84 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements PasswordAuthenticatedInterface
 {
-	use TargetPathTrait;
+    use TargetPathTrait;
 
-	private $userManager;
-	private $urlGenerator;
-	private $csrfTokenManager;
-	private $passwordEncoder;
+    private $userManager;
+    private $urlGenerator;
+    private $csrfTokenManager;
+    private $passwordEncoder;
 
-	public function __construct(UserManagerInterface $userManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
-	{
-		$this->userManager = $userManager;
-		$this->urlGenerator = $urlGenerator;
-		$this->csrfTokenManager = $csrfTokenManager;
-		$this->passwordEncoder = $passwordEncoder;
-	}
+    public function __construct(UserManagerInterface $userManager, UrlGeneratorInterface $urlGenerator, CsrfTokenManagerInterface $csrfTokenManager, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->userManager = $userManager;
+        $this->urlGenerator = $urlGenerator;
+        $this->csrfTokenManager = $csrfTokenManager;
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
-	public function supports(Request $request)
-	{
-		return 'login' === $request->attributes->get('_route')
-			&& $request->isMethod('POST');
-	}
+    public function supports(Request $request)
+    {
+        return 'login' === $request->attributes->get('_route')
+            && $request->isMethod('POST');
+    }
 
-	public function getCredentials(Request $request)
-	{
-		$credentials = [
-			'username' => $request->request->get('_username'),
-			'password' => $request->request->get('_password'),
-			'csrf_token' => $request->request->get('_csrf_token'),
-		];
-		$request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
+    public function getCredentials(Request $request)
+    {
+        $credentials = [
+            'username' => $request->request->get('_username'),
+            'password' => $request->request->get('_password'),
+            'csrf_token' => $request->request->get('_csrf_token'),
+        ];
+        $request->getSession()->set(Security::LAST_USERNAME, $credentials['username']);
 
-		return $credentials;
-	}
+        return $credentials;
+    }
 
-	public function getUser($credentials, UserProviderInterface $userProvider)
-	{
-		$token = new CsrfToken('authenticate', $credentials['csrf_token']);
-		if (!$this->csrfTokenManager->isTokenValid($token)) {
-			throw new InvalidCsrfTokenException();
-		}
+    public function getUser($credentials, UserProviderInterface $userProvider)
+    {
+        $token = new CsrfToken('authenticate', $credentials['csrf_token']);
+        if (!$this->csrfTokenManager->isTokenValid($token)) {
+            throw new InvalidCsrfTokenException();
+        }
 
-		$user = $this->userManager->findUserByUsernameOrEmail($credentials['username']);
+        $user = $this->userManager->findUserByUsernameOrEmail($credentials['username']);
 
-		if (!$user) {
-			// fail authentication with a custom error
-			throw new CustomUserMessageAuthenticationException('Username could not be found.');
-		}
+        if (!$user) {
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Username could not be found.');
+        }
 
-		if (!$user->getEnabled()) throw new CustomUserMessageAuthenticationException('Account is disabled.');
+        if (!$user->getEnabled()) throw new CustomUserMessageAuthenticationException('Account is disabled.');
 
-		return $user;
-	}
+        return $user;
+    }
 
-	public function checkCredentials($credentials, UserInterface $user)
-	{
-		return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
-	}
+    public function checkCredentials($credentials, UserInterface $user)
+    {
+        return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
+    }
 
-	/**
-	 * Used to upgrade (rehash) the user's password automatically over time.
-	 */
-	public function getPassword($credentials): ?string
-	{
-		return $credentials['password'];
-	}
+    /**
+     * Used to upgrade (rehash) the user's password automatically over time.
+     */
+    public function getPassword($credentials): ?string
+    {
+        return $credentials['password'];
+    }
 
-	public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
-	{
-		if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
-			return new RedirectResponse($targetPath);
-		}
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
+    {
+        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+            return new RedirectResponse($targetPath);
+        }
 
-		if ($targetPath = $request->get('_target_path')) {
-			return new RedirectResponse($targetPath);
-		}
-	}
+        if ($targetPath = $request->get('_target_path')) {
+            return new RedirectResponse($targetPath);
+        }
+    }
 
-	protected function getLoginUrl()
-	{
-		return $this->urlGenerator->generate('login');
-	}
+    protected function getLoginUrl()
+    {
+        return $this->urlGenerator->generate('login');
+    }
 }

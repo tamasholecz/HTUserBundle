@@ -18,287 +18,287 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 abstract class User implements HTUserInterface, EquatableInterface, \Serializable
 {
-	/**
-	 * @ORM\Id()
-	 * @ORM\GeneratedValue(strategy="UUID")
-	 * @ORM\Column(type="guid")
-	 */
-	protected $id;
+    /**
+     * @ORM\Id()
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="guid")
+     */
+    protected $id;
 
-	/**
-	 * @ORM\Column(type="string", length=180, unique=true)
-	 * @Assert\Email()
-	 */
-	private $email;
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     * @Assert\Email()
+     */
+    private $email;
 
-	/**
-	 * @ORM\Column(type="string", length=180, unique=true)
-	 */
-	private $username;
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private $username;
 
-	/**
-	 * @ORM\Column(type="json")
-	 */
-	private $roles = [];
+    /**
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
 
-	/**
-	 * @var string The hashed password
-	 * @ORM\Column(type="string")
-	 */
-	private $password;
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
 
-	private $plainPassword;
+    private $plainPassword;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $lastLogin;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastLogin;
 
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	private $enabled = false;
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $enabled = false;
 
-	/**
-	 * @ORM\Column(type="string", length=180, unique=true, nullable=true)
-	 */
-	private $confirmationToken;
+    /**
+     * @ORM\Column(type="string", length=180, unique=true, nullable=true)
+     */
+    private $confirmationToken;
 
-	/**
-	 * @ORM\Column(type="datetime", nullable=true)
-	 */
-	private $passwordRequestedAt;
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $passwordRequestedAt;
 
-	/**
-	 * @ORM\Column(type="string", nullable=true)
-	 */
-	protected $name;
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $name;
 
-	/**
-	 * @ORM\Column(type="string", length=40, nullable=true)
-	 */
-	protected $phone;
+    /**
+     * @ORM\Column(type="string", length=40, nullable=true)
+     */
+    protected $phone;
 
-	/**
-	 * @ORM\Column(type="text", nullable=true)
-	 */
-	protected $remark;
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $remark;
 
-	public function __toString()
-	{
-		return $this->getName() ? (string) $this->getName() : $this->getUsername();
-	}
+    public function __toString()
+    {
+        return $this->getName() ? (string) $this->getName() : $this->getUsername();
+    }
 
-	public function serialize()
-	{
-		return serialize([$this->id, $this->password, $this->username, $this->email, $this->enabled]);
-	}
+    public function serialize()
+    {
+        return serialize([$this->id, $this->password, $this->username, $this->email, $this->enabled]);
+    }
 
-	public function unserialize($serialized)
-	{
-		list($this->id, $this->password, $this->username, $this->email, $this->enabled) = unserialize($serialized);
-	}
+    public function unserialize($serialized)
+    {
+        list($this->id, $this->password, $this->username, $this->email, $this->enabled) = unserialize($serialized);
+    }
 
-	/**
-	 * @return bool
-	 */
-	public function isEqualTo(UserInterface $user)
-	{
-		return $this->getId() === $user->getId() &&
-			$this->getPassword() === $user->getPassword() &&
-			$this->getUsername() === $user->getUsername() &&
-			$this->getEmail() === $user->getEmail() &&
-			$this->getEnabled() === $user->getEnabled();
-	}
+    /**
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        return $this->getId() === $user->getId() &&
+            $this->getPassword() === $user->getPassword() &&
+            $this->getUsername() === $user->getUsername() &&
+            $this->getEmail() === $user->getEmail() &&
+            $this->getEnabled() === $user->getEnabled();
+    }
 
-	public function getUserIdentifier(): string
-	{
-		return $this->getUsername();
-	}
+    public function getUserIdentifier(): string
+    {
+        return $this->getUsername();
+    }
 
-	public function getId(): ?string
-	{
-		return $this->id;
-	}
+    public function getId(): ?string
+    {
+        return $this->id;
+    }
 
-	public function getEmail(): ?string
-	{
-		return $this->email;
-	}
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
 
-	public function setEmail(string $email): self
-	{
-		$this->email = $email;
-		if (!$this->getUsername()) {
-			$this->setUsername($email);
-		}
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+        if (!$this->getUsername()) {
+            $this->setUsername($email);
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * A visual identifier that represents this user.
-	 *
-	 * @see UserInterface
-	 */
-	public function getUsername(): string
-	{
-		return (string) $this->username;
-	}
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        return (string) $this->username;
+    }
 
-	public function setUsername(string $username): self
-	{
-		$this->username = $username;
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @see UserInterface
-	 */
-	public function getRoles(): array
-	{
-		$roles = $this->roles;
-		$roles[] = HTUserInterface::ROLE_DEFAULT;
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = HTUserInterface::ROLE_DEFAULT;
 
-		return array_unique($roles);
-	}
+        return array_unique($roles);
+    }
 
-	public function setRoles(array $roles): self
-	{
-		$this->roles = $roles;
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @see UserInterface
-	 */
-	public function getPassword(): string
-	{
-		return (string) $this->password;
-	}
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
 
-	public function setPassword(string $password): self
-	{
-		$this->password = $password;
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getPlainPassword(): ?string
-	{
-		return $this->plainPassword;
-	}
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
 
-	public function setPlainPassword(?string $password): self
-	{
-		$this->plainPassword = $password;
-		$this->updatedAt = new \DateTimeImmutable();
+    public function setPlainPassword(?string $password): self
+    {
+        $this->plainPassword = $password;
+        $this->updatedAt = new \DateTimeImmutable();
 
-		return $this;
-	}
+        return $this;
+    }
 
-	/**
-	 * @see UserInterface
-	 *
-	 * @return string|null
-	 */
-	public function getSalt()
-	{
-		// not needed when using the "bcrypt" algorithm in security.yaml
-		return null;
-	}
+    /**
+     * @see UserInterface
+     *
+     * @return string|null
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
+    }
 
-	/**
-	 * @see UserInterface
-	 */
-	public function eraseCredentials()
-	{
-		$this->plainPassword = null;
-	}
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        $this->plainPassword = null;
+    }
 
-	public function getLastLogin(): ?DateTimeInterface
-	{
-		return $this->lastLogin;
-	}
+    public function getLastLogin(): ?DateTimeInterface
+    {
+        return $this->lastLogin;
+    }
 
-	public function setLastLogin(?DateTimeInterface $lastLogin): self
-	{
-		$this->lastLogin = $lastLogin;
+    public function setLastLogin(?DateTimeInterface $lastLogin): self
+    {
+        $this->lastLogin = $lastLogin;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getEnabled(): ?bool
-	{
-		return $this->enabled;
-	}
+    public function getEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
 
-	public function setEnabled(bool $enabled): self
-	{
-		$this->enabled = $enabled;
+    public function setEnabled(bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getConfirmationToken(): ?string
-	{
-		return $this->confirmationToken;
-	}
+    public function getConfirmationToken(): ?string
+    {
+        return $this->confirmationToken;
+    }
 
-	public function setConfirmationToken(?string $confirmationToken): self
-	{
-		$this->confirmationToken = $confirmationToken;
+    public function setConfirmationToken(?string $confirmationToken): self
+    {
+        $this->confirmationToken = $confirmationToken;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getPasswordRequestedAt(): ?\DateTimeInterface
-	{
-		return $this->passwordRequestedAt;
-	}
+    public function getPasswordRequestedAt(): ?\DateTimeInterface
+    {
+        return $this->passwordRequestedAt;
+    }
 
-	public function setPasswordRequestedAt(?DateTimeInterface $passwordRequestedAt): self
-	{
-		$this->passwordRequestedAt = $passwordRequestedAt;
+    public function setPasswordRequestedAt(?DateTimeInterface $passwordRequestedAt): self
+    {
+        $this->passwordRequestedAt = $passwordRequestedAt;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function setName(?string $name): self
-	{
-		$this->name = $name;
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getName(): ?string
-	{
-		return $this->name;
-	}
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
 
-	public function setPhone(?string $phone): self
-	{
-		$this->phone = $phone;
+    public function setPhone(?string $phone): self
+    {
+        $this->phone = $phone;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getPhone(): ?string
-	{
-		return $this->phone;
-	}
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
 
-	public function setRemark(?string $remark): self
-	{
-		$this->remark = $remark;
+    public function setRemark(?string $remark): self
+    {
+        $this->remark = $remark;
 
-		return $this;
-	}
+        return $this;
+    }
 
-	public function getRemark(): ?string
-	{
-		return $this->remark;
-	}
+    public function getRemark(): ?string
+    {
+        return $this->remark;
+    }
 }

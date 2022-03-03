@@ -9,17 +9,17 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 class HTUserExtension extends Extension
 {
-	public function load(array $configs, ContainerBuilder $container)
-	{
-		$loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-		$loader->load('services.yaml');
+    public function load(array $configs, ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('services.yaml');
 
-		$configuration = new Configuration();
-		$config = $this->processConfiguration($configuration, $configs);
+        $configuration = new Configuration();
+        $config = $this->processConfiguration($configuration, $configs);
 
-		$container->setParameter('ht_user.model.user.class', $config['user_class']);
-		$container->setParameter('ht_user.registration_form', $config['registration_form']);
-		$container->setParameter('ht_user.profile_form', $config['profile_form']);
-		$container->setParameter('ht_user.change_password_form', $config['change_password_form']);
-	}
+        $container->setParameter('ht_user.model.user.class', $config['user_class']);
+        $container->setParameter('ht_user.registration_form', $config['registration_form']);
+        $container->setParameter('ht_user.profile_form', $config['profile_form']);
+        $container->setParameter('ht_user.change_password_form', $config['change_password_form']);
+    }
 }

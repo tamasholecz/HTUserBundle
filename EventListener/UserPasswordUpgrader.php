@@ -8,30 +8,30 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserPasswordUpgrader
 {
-	private $passwordEncoder;
+    private $passwordEncoder;
 
-	public function __construct(UserPasswordEncoderInterface $passwordEncoder)
-	{
-		$this->passwordEncoder = $passwordEncoder;
-	}
+    public function __construct(UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $this->passwordEncoder = $passwordEncoder;
+    }
 
-	public function prePersist(HTUserInterface $user, $event)// $event Doctrine\Common\Persistence\Event\LifecycleEventArgs | Doctrine\ORM\Event\LifecycleEventArgs
-	{
-		$this->updatePassword($user);
-	}
+    public function prePersist(HTUserInterface $user, $event)// $event Doctrine\Common\Persistence\Event\LifecycleEventArgs | Doctrine\ORM\Event\LifecycleEventArgs
+    {
+        $this->updatePassword($user);
+    }
 
-	public function preUpdate(HTUserInterface $user, PreUpdateEventArgs $event)
-	{
-		$this->updatePassword($user);
-	}
+    public function preUpdate(HTUserInterface $user, PreUpdateEventArgs $event)
+    {
+        $this->updatePassword($user);
+    }
 
-	public function updatePassword(HTUserInterface $user): void
-	{
-		if (0 === strlen($user->getPlainPassword())) {
-			return;
-		}
+    public function updatePassword(HTUserInterface $user): void
+    {
+        if (0 === strlen($user->getPlainPassword())) {
+            return;
+        }
 
-		$user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
-		$user->eraseCredentials();
-	}
+        $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPlainPassword()));
+        $user->eraseCredentials();
+    }
 }

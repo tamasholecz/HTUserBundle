@@ -8,18 +8,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ProfileType extends AbstractType
 {
-	public function buildForm(FormBuilderInterface $builder, array $options)
-	{
-		$builder
-			->add('name')
-			->add('phone')
-		;
-	}
+    public function buildForm(FormBuilderInterface $builder, array $options)
+    {
+        $builder
+            ->add('name')
+            ->add('phone')
+        ;
+    }
 
-	public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults([
-			'translation_domain' => 'user',
-		]);
-	}
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'translation_domain' => 'user',
+        ]);
+    }
 }
