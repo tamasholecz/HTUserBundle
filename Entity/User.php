@@ -86,7 +86,7 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 
 	public function __toString()
 	{
-		return $this->getName() ? $this->getName() : $this->getUsername();
+		return $this->getName() ? (string) $this->getName() : $this->getUsername();
 	}
 
 	public function serialize()
@@ -99,6 +99,9 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 		list($this->id, $this->password, $this->username, $this->email, $this->enabled) = unserialize($serialized);
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isEqualTo(UserInterface $user)
 	{
 		return $this->getId() === $user->getId() &&
@@ -106,6 +109,11 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 			$this->getUsername() === $user->getUsername() &&
 			$this->getEmail() === $user->getEmail() &&
 			$this->getEnabled() === $user->getEnabled();
+	}
+
+	public function getUserIdentifier(): string
+	{
+		return $this->getUsername();
 	}
 
 	public function getId(): ?string
@@ -121,7 +129,9 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 	public function setEmail(string $email): self
 	{
 		$this->email = $email;
-		if (!$this->getUsername()) $this->setUsername($email);
+		if (!$this->getUsername()) {
+			$this->setUsername($email);
+		}
 
 		return $this;
 	}
@@ -191,10 +201,13 @@ abstract class User implements HTUserInterface, EquatableInterface, \Serializabl
 
 	/**
 	 * @see UserInterface
+	 *
+	 * @return string|null
 	 */
 	public function getSalt()
 	{
 		// not needed when using the "bcrypt" algorithm in security.yaml
+		return null;
 	}
 
 	/**

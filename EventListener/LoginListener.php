@@ -20,6 +20,9 @@ class LoginListener implements EventSubscriberInterface
 		$this->userManager = $userManager;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getSubscribedEvents()
 	{
 		return [

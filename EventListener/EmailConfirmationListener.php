@@ -27,6 +27,9 @@ class EmailConfirmationListener implements EventSubscriberInterface
 		$this->session = $session;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function getSubscribedEvents()
 	{
 		return [

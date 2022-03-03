@@ -29,6 +29,9 @@ class UserRolesType extends AbstractType
 		]);
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public function getParent()
 	{
 		return ChoiceType::class;
@@ -37,7 +40,10 @@ class UserRolesType extends AbstractType
 	public function getAvailableRoles(): array
 	{
 		$roles = [];
-		foreach($this->hierarchyRoles as $role => $hierarchy) if ($this->security->isGranted($role)) $roles[$role] = $role;
+		foreach ($this->hierarchyRoles as $role => $hierarchy) {
+			if ($this->security->isGranted($role)) $roles[$role] = $role;
+		}
+
 		return $roles;
 	}
 }
